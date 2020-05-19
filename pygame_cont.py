@@ -12,7 +12,7 @@ pygame.init()
 screen_width = TILESIZE*MAPHEIGHT
 screen_height = TILESIZE*MAPWIDTH
 
-pygame.display.set_caption("First Game")
+pygame.display.set_caption("Pokemon")
 
 # default variables for character movement
 x = 0
@@ -48,20 +48,20 @@ while(run):
 
     #Basic moves
     if keys[pygame.K_LEFT] and x > 0:
-        print(GRID[y//TILESIZE][x//TILESIZE - 1])
-        if GRID[y//TILESIZE][x//TILESIZE - 1] is not WATER: # BLOKADA PRZED WEJŚĆIEM NA WODE
+        # ABS potrzebny bo macierz może zczytywac z ujemnych wartości
+        if GRID[y//TILESIZE][abs(x//TILESIZE - 1)] is not WATER: # BLOKADA PRZED WEJŚĆIEM NA WODE
             x -= PLAYER.VELOCITY
+
     if keys[pygame.K_RIGHT] and x < 1280 - TILESIZE:
-        print(GRID[y//TILESIZE][x//TILESIZE + 1])
         if GRID[y//TILESIZE][x//TILESIZE + 1] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
             x += velocity
+
     if keys[pygame.K_DOWN] and y < 640 - TILESIZE:
-        print(GRID[y//TILESIZE + 1][x//TILESIZE])
         if GRID[y//TILESIZE + 1][x//TILESIZE] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
             y += velocity
+
     if keys[pygame.K_UP] and y > 0:
-        print(GRID[y//TILESIZE - 1][x//TILESIZE])
-        if GRID[y//TILESIZE - 1][x//TILESIZE] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
+        if GRID[abs(y//TILESIZE - 1)][x//TILESIZE] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
             y -= velocity
 
     PLAYER.POS[0] = x
@@ -73,8 +73,8 @@ while(run):
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
             window.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
+   
     window.blit(PLAYER.SPRITE,PLAYER.POS)
-
     pygame.display.update()
 
 
