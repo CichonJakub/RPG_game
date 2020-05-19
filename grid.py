@@ -8,15 +8,15 @@ WATER = 2
 
 class Tree:
     def __init__(self):
-        self.SPRITE = pygame.transform.scale(pygame.image.load('.\\textures\\trees\\tree.png'), (125, 125))
+        self.SPRITE = pygame.transform.scale(pygame.image.load('textures/trees/tree.png'), (125, 125))
         self.X_POS = random.randint(50, 300)
         self.Y_POS = random.randint(50, 450)
 
 # DICTIONARY LINKING TILES TO THEIR COLORS pygame.image.load('pic.png')
 TEXTURES = {
-    DIRT: pygame.image.load('C:\\Users\\Marcin\\Desktop\\PYGAME\\textures\\dirt.png'),
-    GRASS: pygame.image.load('C:\\Users\\Marcin\\Desktop\\PYGAME\\textures\\grass.png'),
-    WATER: pygame.image.load('C:\\Users\\Marcin\\Desktop\\PYGAME\\textures\\water.png')
+    DIRT: pygame.image.load('textures/dirt.png'),
+    GRASS: pygame.image.load('textures/grass.png'),
+    WATER: pygame.image.load('textures/water.png')
 }
 
 # TILES TO BE DISPLAYED
