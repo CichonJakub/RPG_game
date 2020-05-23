@@ -14,11 +14,6 @@ screen_height = TILESIZE*MAPWIDTH
 
 pygame.display.set_caption("Pokemon")
 
-# default variables for character movement
-x = 0
-y = 0
-velocity = 16
-
 PLAYER = player.Player()
 
 # RENDER GAME GRID
@@ -54,15 +49,15 @@ while(run):
 
     if keys[pygame.K_RIGHT] and x < 1280 - TILESIZE:
         if GRID[y//TILESIZE][x//TILESIZE + 1] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
-            x += velocity
+            x += PLAYER.VELOCITY
 
     if keys[pygame.K_DOWN] and y < 640 - TILESIZE:
         if GRID[y//TILESIZE + 1][x//TILESIZE] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
-            y += velocity
+            y += PLAYER.VELOCITY
 
     if keys[pygame.K_UP] and y > 0:
         if GRID[abs(y//TILESIZE - 1)][x//TILESIZE] is not WATER:  # BLOKADA PRZED WEJŚĆIEM NA WODE
-            y -= velocity
+            y -= PLAYER.VELOCITY
 
     PLAYER.POS[0] = x
     PLAYER.POS[1] = y
