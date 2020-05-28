@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import *
 #from new_grid import *
 from settings import *
+from map import *
 import player
 
 class Game:
@@ -13,14 +14,10 @@ class Game:
         pygame.init()
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption(TITLE)
-        with open(MAP, 'r') as f:
-            self.GRID = []
-            for row in f:
-                tmp_row = row.strip().split(',')
-                final_row = []
-                for tile in tmp_row:
-                    final_row.append(tile.strip())
-                self.GRID.append(final_row)
+        self.load_map()
+
+    def load_map(self):
+        self.GRID = Map(MAP)
 
     def new(self):
         # Create objects
@@ -42,10 +39,11 @@ class Game:
         # what's gonna be updated with time
         for row in range(MAPHEIGHT):
             for column in range(MAPWIDTH):
-                self.window.blit( TEXTURES[self.GRID[row][column]], (column*TILESIZE, row*TILESIZE) )
+                self.window.blit( TEXTURES[self.GRID.data[row + self.GRID.vertical_move][column + self.GRID.horizontal_move]], (column*TILESIZE, row*TILESIZE) )
    
         self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
-        pygame.display.update()
+        #pygame.display.update()
+        pygame.display.flip()
 
 
     def events(self):
@@ -60,20 +58,28 @@ class Game:
 
         if keys[pygame.K_LEFT] and x > 0:
         # ABS potrzebny bo macierz może zczytywac z ujemnych wartości
-            if self.GRID[y//TILESIZE][abs(x//TILESIZE - 1)] != 'WATER': # BLOKADA PRZED WEJŚĆIEM NA WODE
+            if self.GRID.data[y//TILESIZE][abs(x//TILESIZE - self.GRID.horizontal_move - 1)] != 'WATER': # BLOKADA PRZED WEJŚĆIEM NA WODE
                 x -= self.PLAYER.VELOCITY
-
+                if x % TILESIZE == 0 and self.GRID.horizontal_move > self.GRID.MARGIN_LEFT:
+                    self.GRID.horizontal_move -= 1
+    
         if keys[pygame.K_RIGHT] and x < 1280 - TILESIZE:
-            if self.GRID[y//TILESIZE][x//TILESIZE + 1] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
+            if self.GRID.data[y//TILESIZE][x//TILESIZE + self.GRID.horizontal_move + 1] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
                 x += self.PLAYER.VELOCITY
+                if x % TILESIZE == 0 and self.GRID.horizontal_move < self.GRID.MARGIN_RIGHT:
+                    self.GRID.horizontal_move += 1
 
         if keys[pygame.K_DOWN] and y < 640 - TILESIZE:
-            if self.GRID[y//TILESIZE + 1][x//TILESIZE] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
+            if self.GRID.data[y//TILESIZE + self.GRID.vertical_move + 1][x//TILESIZE] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
                 y += self.PLAYER.VELOCITY
+                if y % TILESIZE == 0 and self.GRID.vertical_move < self.GRID.MARGIN_BOTTOM:
+                    self.GRID.vertical_move += 1
 
         if keys[pygame.K_UP] and y > 0:
-            if self.GRID[abs(y//TILESIZE - 1)][x//TILESIZE] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
+            if self.GRID.data[abs(y//TILESIZE - self.GRID.vertical_move -1)][x//TILESIZE] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
                 y -= self.PLAYER.VELOCITY
+                if y % TILESIZE == 0 and self.GRID.vertical_move > self.GRID.MARGIN_UP:
+                    self.GRID.vertical_move -= 1
 
         self.PLAYER.POS[0] = x
         self.PLAYER.POS[1] = y
