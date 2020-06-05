@@ -58,6 +58,9 @@ class Game:
         x = self.PLAYER.POS[0]
         y = self.PLAYER.POS[1]
 
+        player_X = x + (self.GRID.horizontal_move * TILESIZE)
+        player_Y = y + (self.GRID.vertical_move * TILESIZE)
+
         # Move in Left and Up directions is still a little bit bugged but works just fine for now :)
         if keys[pygame.K_LEFT] and x > 0:
           # ABS potrzebny bo macierz może zczytywac z ujemnych wartości
@@ -84,24 +87,22 @@ class Game:
                 if y % TILESIZE == 0 and self.GRID.vertical_move > self.GRID.MARGIN_UP:
                     self.GRID.vertical_move -= 1
 
-        
-        player_X = x + (self.GRID.horizontal_move * TILESIZE)
-        player_Y = y + (self.GRID.vertical_move * TILESIZE)
 
         if self.CASTLE.checkCastleEntrance(player_X, player_Y):
-            self.GRID = Map('maps/first_map.txt')
+            self.GRID = Map('maps/castle.txt')
+            self.outer_cooridnates = [player_X, player_Y]
+            x = WIDTH//2
+            y = 80
+        
+        if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] == 'DOOR':
+            self.GRID = Map('maps/second_map.txt')
             x = 0
             y = 0
+            #x = self.outer_cooridnates[0] 
+            #y = self.outer_cooridnates[1] + TILESIZE
 
 
-        #if keys[pygame.K_o] and y > 0:
-        #    self.GRID = Map('maps/first_map.txt')
-
-        #if keys[pygame.K_r] and y > 0:
-        #    self.GRID = Map('maps/second_map.txt')
-
-
-        self.PLAYER.POS[0] = x
+        self.PLAYER.POS[0] = x  
         self.PLAYER.POS[1] = y
 
         self.window.fill((0,0,0))

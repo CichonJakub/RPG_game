@@ -3,7 +3,7 @@ from settings import *
 
 class Castle:
     def __init__(self):
-        self.SPRITE = pygame.image.load('./textures/buildings/castle.png')
+        self.SPRITE = pygame.image.load('./textures/buildings/castle/castle.png')
         self.POS = [1024,896]
         #self.POS = [0,0]
         self.MOVING = False

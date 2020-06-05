@@ -16,5 +16,8 @@ MAP = 'maps/second_map.txt'
 TEXTURES = {
     'DIRT': pygame.image.load('textures/dirt.png'),
     'GRASS': pygame.image.load('textures/grass.png'),
-    'WATER': pygame.image.load('textures/water.png')
+    'WALL': pygame.image.load('textures/wall.png'),
+    'WATER': pygame.image.load('textures/water.png'),
+    'STONE': pygame.image.load('textures/stone.jpg'),
+    'DOOR': pygame.image.load('textures/buildings/castle/door.png'),
 }

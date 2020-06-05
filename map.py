@@ -29,7 +29,7 @@ class Map:
 
         # ile mapa może się przesunąć maksymalnie
         self.MARGIN_LEFT = 0
-        self.MARGIN_RIGHT = self.tilewidth - MAPWIDTH 
+        self.MARGIN_RIGHT = self.tilewidth - MAPWIDTH
         self.MARGIN_BOTTOM = self.tileheight - MAPHEIGHT
         print(self.MARGIN_RIGHT)
         print(self.MARGIN_BOTTOM)
