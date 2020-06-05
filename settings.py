@@ -1,7 +1,7 @@
 import pygame
 
 # game settings
-FPS = 60
+FPS = 100
 TITLE = "POKEMON"
 
 # grid settings
