@@ -33,5 +33,4 @@ class Map:
         self.MARGIN_BOTTOM = self.tileheight - MAPHEIGHT
         print(self.MARGIN_RIGHT)
         print(self.MARGIN_BOTTOM)
-        self.MARGIN_UP = 0
-        
+        self.MARGIN_UP = 0    

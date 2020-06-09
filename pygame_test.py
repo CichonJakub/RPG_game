@@ -9,6 +9,7 @@ from settings import *
 from map import *
 import player
 import castle
+import npc
 
 class Game:
     def __init__(self):
@@ -24,6 +25,9 @@ class Game:
         # Create objects
         self.PLAYER = player.Player()
         self.CASTLE = castle.Castle()
+        self.NPC = npc.importNpc(self)
+        print(self.NPC[0].sprite)
+        print(self.NPC[0].position)
 
     def run(self):
         ### GAME LOOP
@@ -45,6 +49,7 @@ class Game:
 
         self.window.blit(self.CASTLE.SPRITE,(self.CASTLE.POS[0]-(self.GRID.horizontal_move*TILESIZE), self.CASTLE.POS[1]-(self.GRID.vertical_move*TILESIZE) ))
         self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
+        self.window.blit(self.NPC[0].sprite,(self.NPC[0].position[0]-(self.GRID.horizontal_move*TILESIZE), self.NPC[0].position[1]-(self.GRID.vertical_move*TILESIZE) ))
         pygame.display.update()
 
 
@@ -87,20 +92,24 @@ class Game:
                 if y % TILESIZE == 0 and self.GRID.vertical_move > self.GRID.MARGIN_UP:
                     self.GRID.vertical_move -= 1
 
-
+        if keys[pygame.K_f] and self.NPC[0].isCollision(player_X, player_Y):
+            print("COLLISION")
+            print(self.NPC[0].dialogues[0].text)
+        
         if self.CASTLE.checkCastleEntrance(player_X, player_Y):
+            self.old_map_coordinates = [x, y]
+            print("AGAIN " + str(((y//TILESIZE) + self.GRID.vertical_move)))
+            #self.old_hor_ver_move = [self.GRID.horizontal_move, self.GRID.vertical_move]
+            self.PREV_GRID = self.GRID
             self.GRID = Map('maps/castle.txt')
-            self.outer_cooridnates = [player_X, player_Y]
             x = WIDTH//2
             y = 80
         
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] == 'DOOR':
-            self.GRID = Map('maps/second_map.txt')
-            x = 0
-            y = 0
-            #x = self.outer_cooridnates[0] 
-            #y = self.outer_cooridnates[1] + TILESIZE
-
+            x = self.old_map_coordinates[0] 
+            y = self.old_map_coordinates[1] + self.PLAYER.VELOCITY
+            self.GRID = self.PREV_GRID
+         
 
         self.PLAYER.POS[0] = x  
         self.PLAYER.POS[1] = y
