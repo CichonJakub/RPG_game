@@ -38,6 +38,7 @@ def main_manu():
         # left, top, width, height
         button_1 = pygame.Rect(50, 100, 200, 50)
         button_2 = pygame.Rect(50, 200, 200, 50)
+        make_text('Create a Hero', font, black, screen, 55, 110)
 
         if button_1.collidepoint((mx, my)):
             if click:
@@ -207,6 +208,8 @@ def hero():
                     note = open('postacie.txt', 'a')
                     note.write(f'strength:{strength};agility:{agility};intelligence:{intelligence};endurance:{endurance};luck:{luck};charisma:{charisma}\n')
                     note.close()
+                    #mp = Character(sxdasdasdasd)
+                    # dodac do tablicy
 
         #generating buttons ------------
         pygame.draw.rect(screen, green, button_strength_add)
