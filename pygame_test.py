@@ -4,7 +4,6 @@
 
 import pygame
 from pygame.locals import *
-#from new_grid import *
 from settings import *
 from map import *
 import player
@@ -16,16 +15,29 @@ class Game:
         pygame.init()
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption(TITLE)
-        self.load_map()
 
     def load_map(self):
         self.GRID = Map(MAP)
+    
+    def obj_on_curr_map(self):
+        self.activeLoc = []
+        self.activeNPC = []
+
+        for self.location in self.LOC:
+            if self.location.map == self.GRID.name:
+                self.activeLoc.append(self.location)
+
+        for self.character in self.NPC:
+            if self.character.map == self.GRID.name:
+                self.activeNPC.append(self.character)
 
     def new(self):
         # Create objects
         self.PLAYER = player.Player()
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
+        self.load_map()
+        self.obj_on_curr_map()
 
         
 
@@ -47,11 +59,11 @@ class Game:
             for column in range(MAPWIDTH):
                 self.window.blit( TEXTURES[self.GRID.data[row + self.GRID.vertical_move][column + self.GRID.horizontal_move]], (column*TILESIZE, row*TILESIZE) )
 
-        for location in self.LOC:
+        for location in self.activeLoc:
             if location.map == self.GRID.name:
                 self.window.blit(location.sprite,(location.position[0]-(self.GRID.horizontal_move*TILESIZE), location.position[1]-(self.GRID.vertical_move*TILESIZE) ))
 
-        for character in self.NPC:
+        for character in self.activeNPC:
             if character.map == self.GRID.name:
                 self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
         
@@ -98,23 +110,27 @@ class Game:
                 if y % TILESIZE == 0 and self.GRID.vertical_move > self.GRID.MARGIN_UP:
                     self.GRID.vertical_move -= 1
 
-        if keys[pygame.K_f] and self.NPC[0].isCollision(player_X, player_Y):
-            print("COLLISION!!!")
-            print(self.NPC[0].dialogues[0].text)
+        for npcInteract in self.activeNPC:
+            if keys[pygame.K_f] and npcInteract.isCollision(player_X, player_Y):
+                print("COLLISION!!!")
+                print(npcInteract.dialogues[0].text)
         
-        if self.LOC[0].checkInteraction(player_X, player_Y):
-            self.old_map_coordinates = [x, y]
-            print("AGAIN " + str(((y//TILESIZE) + self.GRID.vertical_move)))
-            #self.old_hor_ver_move = [self.GRID.horizontal_move, self.GRID.vertical_move]
-            self.PREV_GRID = self.GRID
-            self.GRID = Map('maps/castle.txt')
-            x = WIDTH//2
-            y = 80
+        for locInteract in self.activeLoc:
+            if locInteract.checkInteraction(player_X, player_Y):
+                self.old_map_coordinates = [x, y]
+                print("AGAIN " + str(((y//TILESIZE) + self.GRID.vertical_move)))
+                #self.old_hor_ver_move = [self.GRID.horizontal_move, self.GRID.vertical_move]
+                self.PREV_GRID = self.GRID
+                self.GRID = Map(locInteract.next_map)
+                self.obj_on_curr_map()
+                x = WIDTH//2
+                y = 80
 
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] == 'DOOR':
             x = self.old_map_coordinates[0] 
             y = self.old_map_coordinates[1] + self.PLAYER.VELOCITY
             self.GRID = self.PREV_GRID
+            self.obj_on_curr_map()
          
 
         self.PLAYER.POS[0] = x  

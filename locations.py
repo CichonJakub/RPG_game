@@ -17,6 +17,7 @@ class LOCATIONS:
     def __init__(self, cellsArray):
         self.location_id = cellsArray[0]
         self.map = "maps/" + cellsArray[1] + ".txt"
+        self.next_map = "maps/" + cellsArray[9] + ".txt"
         self.position = [int(cellsArray[2]), int(cellsArray[3])]
         self.sprite = pygame.image.load("./textures/buildings/castle/" + cellsArray[8])
 
