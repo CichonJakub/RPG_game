@@ -18,6 +18,7 @@ class Game:
 
     def load_map(self):
         self.GRID = Map(MAP)
+        self.PREV_GRID = []
     
     def obj_on_curr_map(self):
         self.activeLoc = []
@@ -120,7 +121,7 @@ class Game:
                 self.old_map_coordinates = [x, y]
                 print("AGAIN " + str(((y//TILESIZE) + self.GRID.vertical_move)))
                 #self.old_hor_ver_move = [self.GRID.horizontal_move, self.GRID.vertical_move]
-                self.PREV_GRID = self.GRID
+                self.PREV_GRID.append(self.GRID)
                 self.GRID = Map(locInteract.next_map)
                 self.obj_on_curr_map()
                 x = WIDTH//2
@@ -129,7 +130,8 @@ class Game:
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] == 'DOOR':
             x = self.old_map_coordinates[0] 
             y = self.old_map_coordinates[1] + self.PLAYER.VELOCITY
-            self.GRID = self.PREV_GRID
+            self.GRID = self.PREV_GRID[-1]
+            self.PREV_GRID.pop()
             self.obj_on_curr_map()
          
 
