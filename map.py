@@ -14,6 +14,7 @@ class Map:
                     final_row.append(tile.strip())
                 self.data.append(final_row)
 
+        self.name = filename
         self.tilewidth = len(self.data[0])
         print(self.tilewidth)
         self.tileheight = len(self.data)
