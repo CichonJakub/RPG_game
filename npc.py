@@ -16,7 +16,7 @@ print(sheet.nrows)
 class NPC:
     def __init__(self, cellsArray):
         self.npc_id = cellsArray[0]
-        self.map = cellsArray[1]
+        self.map = "maps/" + cellsArray[1] + ".txt"
         self.position = [int(cellsArray[2]), int(cellsArray[3])]
         self.sprite = pygame.image.load("./textures/characters/" + cellsArray[4])
         self.dialogues = []

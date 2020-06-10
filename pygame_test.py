@@ -47,10 +47,13 @@ class Game:
             for column in range(MAPWIDTH):
                 self.window.blit( TEXTURES[self.GRID.data[row + self.GRID.vertical_move][column + self.GRID.horizontal_move]], (column*TILESIZE, row*TILESIZE) )
 
-        # Nie wyswietlaja sie komponenety po przejsciu do zamku, aczkowlwiek nie widzialnie istnieja bo mozna wejsc w interakcje, trzeba by było generować obiekty i je usuwać w zależności od mapy
-        if self.GRID.name == ('maps/second_map.txt'):
-            self.window.blit(self.NPC[0].sprite,(self.NPC[0].position[0]-(self.GRID.horizontal_move*TILESIZE), self.NPC[0].position[1]-(self.GRID.vertical_move*TILESIZE) ))
-            self.window.blit(self.LOC[0].sprite,(self.LOC[0].position[0]-(self.GRID.horizontal_move*TILESIZE), self.LOC[0].position[1]-(self.GRID.vertical_move*TILESIZE) ))
+        for location in self.LOC:
+            if location.map == self.GRID.name:
+                self.window.blit(location.sprite,(location.position[0]-(self.GRID.horizontal_move*TILESIZE), location.position[1]-(self.GRID.vertical_move*TILESIZE) ))
+
+        for character in self.NPC:
+            if character.map == self.GRID.name:
+                self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
         
         self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
         pygame.display.update()
