@@ -9,17 +9,20 @@ from map import *
 import player
 import locations
 import npc
+import net
 
 class Game:
     def __init__(self):
         pygame.init()
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption(TITLE)
+        server = net.Net()
+        server.connectToServer()
 
     def load_map(self):
         self.GRID = Map(MAP)
         self.PREV_GRID = []
-    
+
     def obj_on_curr_map(self):
         self.activeLoc = []
         self.activeNPC = []
@@ -40,7 +43,7 @@ class Game:
         self.load_map()
         self.obj_on_curr_map()
 
-        
+
 
     def run(self):
         ### GAME LOOP
@@ -53,7 +56,7 @@ class Game:
     def quit(self):
         # Quit game
         pygame.quit()
-    
+
     def updateMap(self):
         # what's gonna be updated with time
         for row in range(MAPHEIGHT):
@@ -67,7 +70,7 @@ class Game:
         for character in self.activeNPC:
             if character.map == self.GRID.name:
                 self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
-        
+
         self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
         pygame.display.update()
 
@@ -92,7 +95,7 @@ class Game:
                 x -= self.PLAYER.VELOCITY
                 if x % TILESIZE == 0 and self.GRID.horizontal_move > self.GRID.MARGIN_LEFT:
                     self.GRID.horizontal_move -= 1
-    
+
         if keys[pygame.K_RIGHT] and x < WIDTH - TILESIZE:
             if self.GRID.data[y//TILESIZE + self.GRID.vertical_move][x//TILESIZE + self.GRID.horizontal_move + 1] != 'WATER':  # BLOKADA PRZED WEJŚĆIEM NA WODE
                 x += self.PLAYER.VELOCITY
@@ -115,7 +118,7 @@ class Game:
             if keys[pygame.K_f] and npcInteract.isCollision(player_X, player_Y):
                 print("COLLISION!!!")
                 print(npcInteract.dialogues[0].text)
-        
+
         for locInteract in self.activeLoc:
             if locInteract.checkInteraction(player_X, player_Y):
                 self.old_map_coordinates = [x, y]
@@ -128,14 +131,14 @@ class Game:
                 y = 80
 
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] == 'DOOR':
-            x = self.old_map_coordinates[0] 
+            x = self.old_map_coordinates[0]
             y = self.old_map_coordinates[1] + self.PLAYER.VELOCITY
             self.GRID = self.PREV_GRID[-1]
             self.PREV_GRID.pop()
             self.obj_on_curr_map()
-         
 
-        self.PLAYER.POS[0] = x  
+
+        self.PLAYER.POS[0] = x
         self.PLAYER.POS[1] = y
 
         self.window.fill((0,0,0))
