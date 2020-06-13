@@ -12,6 +12,9 @@ WIDTH = MAPWIDTH * TILESIZE
 HEIGHT = MAPHEIGHT * TILESIZE
 MAP = 'maps/second_map.txt'
 
+LOCKED_TILES = ['WATER', 'STONE']
+ENTRANCE = ['DOOR']
+
 # DICTIONARY LINKING TILES TO THEIR COLORS pygame.image.load('pic.png')
 TEXTURES = {
     'DIRT': pygame.image.load('textures/dirt.png'),
@@ -19,5 +22,9 @@ TEXTURES = {
     'WALL': pygame.image.load('textures/wall.png'),
     'WATER': pygame.image.load('textures/water.png'),
     'STONE': pygame.image.load('textures/stone.jpg'),
-    'DOOR': pygame.image.load('textures/buildings/castle/door.png'),
+    'DOOR': pygame.image.load('textures/locations/door.png'),
 }
+
+white = (255, 255, 255) 
+black = (0, 0, 0) 
+blue = (0, 0, 128) 
