@@ -19,7 +19,7 @@ class LOCATIONS:
         self.map = "maps/" + cellsArray[1] + ".txt"
         self.next_map = "maps/" + cellsArray[9] + ".txt"
         self.position = [int(cellsArray[2]), int(cellsArray[3])]
-        self.sprite = pygame.image.load("./textures/buildings/castle/" + cellsArray[8])
+        self.sprite = pygame.image.load("./textures/locations/" + cellsArray[8])
 
         # Collision coordinates
         self.interact_left = cellsArray[4]

@@ -12,3 +12,4 @@ class Player:
         self.DIR = False
         self.MOVING = False
         self.VELOCITY = 16
+        self.PREV_POS = []

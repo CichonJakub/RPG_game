@@ -153,7 +153,7 @@ class Game:
 
         for locInteract in self.activeLoc:
             if locInteract.checkInteraction(player_X, player_Y):
-                self.old_map_coordinates = [x, y]
+                self.PLAYER.PREV_POS.append([x, y])
                 self.PREV_GRID.append(self.GRID)
                 self.GRID = Map(locInteract.next_map)
                 self.obj_on_curr_map()
@@ -162,8 +162,9 @@ class Game:
                 self.GRID.vertical_move += self.GRID.MARGIN_BOTTOM
 
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] in ENTRANCE:
-            x = self.old_map_coordinates[0] + self.PLAYER.VELOCITY
-            y = self.old_map_coordinates[1] + self.PLAYER.VELOCITY
+            x = self.PLAYER.PREV_POS[-1][0]
+            y = self.PLAYER.PREV_POS[-1][1] + TILESIZE
+            self.PLAYER.PREV_POS.pop()
             self.GRID = self.PREV_GRID[-1]
             self.PREV_GRID.pop()
             self.obj_on_curr_map()
