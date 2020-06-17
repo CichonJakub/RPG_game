@@ -93,7 +93,7 @@ class Game:
         player_X = x + (self.GRID.horizontal_move * TILESIZE)
         player_Y = y + (self.GRID.vertical_move * TILESIZE)
 
-        # Move in Left and Up directions is still a little bit bugged but works just fine for now :)
+        # Movement
         if keys[pygame.K_LEFT] and x > 0:
           # ABS potrzebny bo macierz może zczytywac z ujemnych wartości
             if self.GRID.data[y//TILESIZE + self.GRID.vertical_move][abs(x//TILESIZE + self.GRID.horizontal_move - 1)] not in LOCKED_TILES: # BLOKADA PRZED WEJŚĆIEM NA WODE
@@ -119,39 +119,45 @@ class Game:
                 if y % TILESIZE == 0 and self.GRID.vertical_move > self.GRID.MARGIN_UP:
                     self.GRID.vertical_move -= 1
 
-        # aby wejsc w interakcje z NPC wciskamy 'F' w jego okolicy
-        # dialogi wciąż nie chodzą, ale mam nadzieje że da sie to elegancko ogarnac, beda mniej wiecej wyswietlac sie jak w obecnej formie jeszcze dorzuce zczytywanie z klawiatury i wtedy przerzucanie tekxtów
-        # problem jeszcze z dialogami dla innych bo w zamku MIME nic nie mówi a powinien bo na konsoli jest
-        # chwilowo więcej nie zrobię bo jutro idę na komunie kuzyna, na szczescie ostatnia w tym sezonie heh
+        # interactions with NPCs
         for npcInteract in self.activeNPC:
             if keys[pygame.K_f] and npcInteract.isCollision(player_X, player_Y):
                 print("COLLISION!!!")
-                self.activeNext = True
+            
                 for dialogue in npcInteract.dialogues:
                     print(dialogue.text)
-                    try:
-                        self.dialNext = dialogue.next[0]
-                    except:
-                        print("BRAK NEXT")
-                        self.activeNext = False
+                    if (dialogue.questId, dialogue.stage) in self.PLAYER.CURR_QUESTS.items():
+                           print("CHICKEN")
+                           if dialogue.npc == npcInteract.npc_id:
+                                print("POBRALEM")
+                                dialogue.currentStage = "True"
+                                print(dialogue.text)
 
-                    if dialogue.player == "True":
-                        self.playerDialogue(dialogue.text, player_X, player_Y)
-                    else:
-                        print("SIEMA")
-                        self.npcDialogue(dialogue.text, npcInteract.position[0], npcInteract.position[1])
+                    if dialogue.currentStage == "True":
+                        print("truetruetrue")
+                        self.dialogue_root = dialogue
+                        self.activeNext = True
+                        while self.activeNext:
+                            if dialogue.interact == "True":
+                                self.talkDialogue(dialogue.text, True)
+                                if dialogue.option >= 1.0:
+                                    print("AAA")
+                                    print(dialogue.option)
+                                    self.playerChoice(dialogue, npcInteract)
+                                else:
+                                    self.wait()  
+                            else:
+                                self.talkDialogue(dialogue.text, False)
+                                self.wait()
 
-                    while self.activeNext:
-                        if self.dialNext.player == "True":
-                            self.playerDialogue(self.dialNext.text, player_X, player_Y)
-                        else:
-                            self.npcDialogue(self.dialNext.text, npcInteract.position[0], npcInteract.position[1])
-                        try:
-                            self.dialNext = self.dialNext.next[0]
-                        except:
-                            self.activeNext = False
+                            try:
+                                dialogue = dialogue.next[0]
+                                print("jest next")
+                                self.activeNext = True
+                            except:
+                                self.activeNext = False
 
-
+        # Enter the location
         for locInteract in self.activeLoc:
             if locInteract.checkInteraction(player_X, player_Y):
                 self.PLAYER.PREV_POS.append([x, y])
@@ -162,6 +168,7 @@ class Game:
                 y = HEIGHT - 2*TILESIZE
                 self.GRID.vertical_move += self.GRID.MARGIN_BOTTOM
 
+        # Leave the location
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] in ENTRANCE:
             x = self.PLAYER.PREV_POS[-1][0]
             y = self.PLAYER.PREV_POS[-1][1] + TILESIZE
@@ -171,29 +178,47 @@ class Game:
             self.obj_on_curr_map()
 
 
+        #updates
         self.PLAYER.POS[0] = x
         self.PLAYER.POS[1] = y
-
         self.window.fill((0,0,0))
         self.updateMap()
 
-    def playerDialogue(self, message, player_X, player_Y):
+    def talkDialogue(self, message, is_player):
         self.dial_text = self.font.render(message, True, black, white)
         self.textRect = self.dial_text.get_rect()
-        self.textRect.center = (player_X-5*TILESIZE, player_Y)
+        if is_player:
+            self.textRect.center = (self.PLAYER.POS[0]-3*TILESIZE, self.PLAYER.POS[1]) 
+        else:
+            self.textRect.center = (self.PLAYER.POS[0]+3*TILESIZE, self.PLAYER.POS[1]) 
         self.window.blit(self.dial_text, self.textRect)
         pygame.display.update()
-        time.sleep(1)
 
-    def npcDialogue(self, message, npc_X, npc_Y):
-        print("NO ELO")
-        self.dial_text = self.font.render(message, True, black, white)
-        self.textRect = self.dial_text.get_rect()
-        self.textRect.center = (npc_X+5*TILESIZE, npc_Y)
-        #self.textRect.center = (256, 896)
-        self.window.blit(self.dial_text, self.textRect)
-        pygame.display.update()
-        time.sleep(1)
+    def playerChoice(self, dialogue, npcInteract):
+        while True:
+            for event in pygame.event.get():
+                print("wait")
+                print(dialogue.option)
+                if event.type == KEYDOWN and event.key == K_1 and dialogue.option >= 1:
+                    self.updateMap()
+                    self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
+                    print(self.PLAYER.CURR_QUESTS)
+                    npcInteract.dialogues.remove(self.dialogue_root)
+                    npcInteract.dialogues[0].currentStage = "True"
+                    return
+                elif event.type == KEYDOWN and event.key == K_2 and dialogue.option >= 2:
+                    self.updateMap()
+                    return
+                elif event.type == KEYDOWN and event.key == K_3 and dialogue.option >= 3:
+                    self.updateMap()
+                    return
+
+    def wait(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN and event.key == K_n:
+                    self.updateMap()
+                    return
 
     def show_start_menu(self):
         # Show starting menu

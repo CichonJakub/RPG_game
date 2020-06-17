@@ -17,12 +17,14 @@ class DLine:
         self.npc = cellsArray[0]
         self.questId = cellsArray[1]
         self.stage = cellsArray[2]
-        self.player = cellsArray[3]
+        self.interact = cellsArray[3]
         self.segment = cellsArray[4]
         self.option = cellsArray[5]
         self.reqs = cellsArray[6]
         self.text = cellsArray[7]
         self.reward = cellsArray[8]
+        self.currentStage = cellsArray[9]
+        self.avaliableDialogues = []
         self.next = []
 
 def importDialogueTree(self):

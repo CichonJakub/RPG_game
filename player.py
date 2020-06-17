@@ -15,3 +15,4 @@ class Player:
         self.MOVING = False
         self.VELOCITY = 16
         self.PREV_POS = []
+        self.CURR_QUESTS = {}
