@@ -1,5 +1,16 @@
 import eventlet
 import socketio
+import json
+
+class Player:
+    def __init__(self, sid, name, map, posX, posY, sprite):
+        self.sid = sid
+        self.name = name
+        self.map = map
+        self.position = [posX, posY]
+        self.sprite = sprite
+
+players = []
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio, static_files={
@@ -18,6 +29,14 @@ def my_message(sid, data):
 def on_message(sid, data):
     print(data)
     sio.emit('helloBack', 'Message from the server')
+
+@sio.on('newPlayer')
+def on_message(sid, data):
+    print(data)
+    data = json.loads(data)
+    player = Player(sid, data.name, data.map, data.posX, data.posY, data.sprite)
+    print(sid + " " + data.name + " " + data.map)
+    players.append(player)
 
 @sio.event
 def disconnect(sid):

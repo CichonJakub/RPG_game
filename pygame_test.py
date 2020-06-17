@@ -19,9 +19,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption(TITLE)
-        self.font = pygame.font.Font('freesansbold.ttf', 32) 
-        server = net.Net()
-        server.connectToServer()
+        self.font = pygame.font.Font('freesansbold.ttf', 32)
+        self.server = net.Net()
+        self.server.connectToServer()
 
     def load_map(self):
         self.GRID = Map(MAP)
@@ -42,6 +42,7 @@ class Game:
     def new(self):
         # Create objects
         self.PLAYER = player.Player()
+        self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64.png')
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
         self.load_map()
@@ -135,14 +136,14 @@ class Game:
                         self.activeNext = False
 
                     if dialogue.player == "True":
-                        self.playerDialogue(dialogue.text, player_X, player_Y)   
+                        self.playerDialogue(dialogue.text, player_X, player_Y)
                     else:
                         print("SIEMA")
                         self.npcDialogue(dialogue.text, npcInteract.position[0], npcInteract.position[1])
 
                     while self.activeNext:
                         if self.dialNext.player == "True":
-                            self.playerDialogue(self.dialNext.text, player_X, player_Y)    
+                            self.playerDialogue(self.dialNext.text, player_X, player_Y)
                         else:
                             self.npcDialogue(self.dialNext.text, npcInteract.position[0], npcInteract.position[1])
                         try:
@@ -179,7 +180,7 @@ class Game:
     def playerDialogue(self, message, player_X, player_Y):
         self.dial_text = self.font.render(message, True, black, white)
         self.textRect = self.dial_text.get_rect()
-        self.textRect.center = (player_X-5*TILESIZE, player_Y) 
+        self.textRect.center = (player_X-5*TILESIZE, player_Y)
         self.window.blit(self.dial_text, self.textRect)
         pygame.display.update()
         time.sleep(1)
@@ -188,8 +189,8 @@ class Game:
         print("NO ELO")
         self.dial_text = self.font.render(message, True, black, white)
         self.textRect = self.dial_text.get_rect()
-        self.textRect.center = (npc_X+5*TILESIZE, npc_Y) 
-        #self.textRect.center = (256, 896) 
+        self.textRect.center = (npc_X+5*TILESIZE, npc_Y)
+        #self.textRect.center = (256, 896)
         self.window.blit(self.dial_text, self.textRect)
         pygame.display.update()
         time.sleep(1)
