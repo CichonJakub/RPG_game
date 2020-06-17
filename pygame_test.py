@@ -139,7 +139,7 @@ class Game:
                         self.activeNext = True
                         while self.activeNext:
                             if dialogue.interact == "True":
-                                self.talkDialogue(dialogue.text, True)
+                                self.talkDialogue(dialogue.text)
                                 if dialogue.option >= 1.0:
                                     print("AAA")
                                     print(dialogue.option)
@@ -147,7 +147,7 @@ class Game:
                                 else:
                                     self.wait()  
                             else:
-                                self.talkDialogue(dialogue.text, False)
+                                self.talkDialogue(dialogue.text)
                                 self.wait()
 
                             try:
@@ -184,15 +184,17 @@ class Game:
         self.window.fill((0,0,0))
         self.updateMap()
 
-    def talkDialogue(self, message, is_player):
-        self.dial_text = self.font.render(message, True, black, white)
-        self.textRect = self.dial_text.get_rect()
-        if is_player:
-            self.textRect.center = (self.PLAYER.POS[0]-3*TILESIZE, self.PLAYER.POS[1]) 
-        else:
-            self.textRect.center = (self.PLAYER.POS[0]+3*TILESIZE, self.PLAYER.POS[1]) 
-        self.window.blit(self.dial_text, self.textRect)
-        pygame.display.update()
+    def talkDialogue(self, message):
+        new_message = ""
+        for letter in message:
+            new_message += letter
+            self.dial_text = self.font.render(new_message, True, black, white)
+            self.textRect = self.dial_text.get_rect()
+            self.textRect.center = (WIDTH//2, HEIGHT-0.25*TILESIZE)
+            self.textRect.width = WIDTH         
+            self.window.blit(self.dial_text, self.textRect)
+            pygame.display.update()
+            time.sleep(0.03)
 
     def playerChoice(self, dialogue, npcInteract):
         while True:
