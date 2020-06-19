@@ -10,7 +10,7 @@ from map import *
 import player
 import locations
 import npc
-#import net
+import net
 
 
 class Game:
@@ -20,8 +20,8 @@ class Game:
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption(TITLE)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
-        #self.server = net.Net()
-        #self.server.connectToServer()
+        self.server = net.Net()
+        self.server.connectToServer()
 
     def load_map(self):
         self.GRID = Map(MAP)
@@ -125,25 +125,20 @@ class Game:
                 print("COLLISION!!!")
             
                 for dialogue in npcInteract.dialogues:
-                    print(dialogue.text)
+                    # check for enabling new dialogues depanding on a quest
                     if (dialogue.questId, dialogue.stage) in self.PLAYER.CURR_QUESTS.items():
-                           print("CHICKEN")
                            if dialogue.npc == npcInteract.npc_id:
-                                print("POBRALEM")
                                 dialogue.currentStage = "True"
                                 print(dialogue.text)
 
                     if dialogue.currentStage == "True":
                         self.dialogue_choice = 1
-                        print("truetruetrue")
                         self.dialogue_root = dialogue
                         self.activeNext = True
                         while self.activeNext:
                             if dialogue.interact == "True":
                                 self.talkDialogue(dialogue.text)
                                 if dialogue.option >= 1.0:
-                                    print("AAA")
-                                    print(dialogue.option)
                                     self.playerChoice(dialogue, npcInteract)
                                 else:
                                     self.wait()  
@@ -152,22 +147,15 @@ class Game:
                                 self.wait()
 
                             try:
-                                print(self.dialogue_choice)
-                                print("CHOICE")
-                                print(dialogue.next[0].choice)
                                 for choice in range(self.dialogue_choice):
-                                    print(dialogue.next[0].choice == self.dialogue_choice)
-                                    print(dialogue.next[0].text)
                                     if dialogue.next[0].choice == self.dialogue_choice:
-                                        print("zmieniam dialogi")
                                         dialogue = dialogue.next[0]
-                                        print("jest next")
+                                        #back up to default dialogues
                                         self.dialogue_choice = 1
                                         self.activeNext = True
                                     else:
-                                        print("zmieniam dialogi")
+                                        #skip one dialogue option
                                         dialogue = dialogue.next[0].next[0]
-                                        print("jest next")
                                         self.activeNext = True
                             except:
                                 self.activeNext = False
@@ -214,12 +202,11 @@ class Game:
     def playerChoice(self, dialogue, npcInteract):
         while True:
             for event in pygame.event.get():
-                print("wait")
-                print(dialogue.option)
                 if event.type == KEYDOWN and event.key == K_1 and dialogue.option >= 1:
                     self.dialogue_choice = 1 
                     self.updateMap()
                     self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
+                    print("Current quests: ")
                     print(self.PLAYER.CURR_QUESTS)
                     npcInteract.dialogues.remove(self.dialogue_root)
                     npcInteract.dialogues[0].currentStage = "True"
