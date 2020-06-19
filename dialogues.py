@@ -24,7 +24,8 @@ class DLine:
         self.text = cellsArray[7]
         self.reward = cellsArray[8]
         self.currentStage = cellsArray[9]
-        self.avaliableDialogues = []
+        self.choice = int(cellsArray[10])
+        self.avaliableDialogues = []   
         self.next = []
 
 def importDialogueTree(self):

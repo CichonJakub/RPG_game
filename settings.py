@@ -28,3 +28,5 @@ TEXTURES = {
 white = (255, 255, 255) 
 black = (0, 0, 0) 
 blue = (0, 0, 128) 
+
+subtitles_speed = 0.03

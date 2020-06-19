@@ -10,7 +10,7 @@ from map import *
 import player
 import locations
 import npc
-import net
+#import net
 
 
 class Game:
@@ -20,8 +20,8 @@ class Game:
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption(TITLE)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
-        self.server = net.Net()
-        self.server.connectToServer()
+        #self.server = net.Net()
+        #self.server.connectToServer()
 
     def load_map(self):
         self.GRID = Map(MAP)
@@ -42,7 +42,7 @@ class Game:
     def new(self):
         # Create objects
         self.PLAYER = player.Player()
-        self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64.png')
+        #self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64.png')
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
         self.load_map()
@@ -134,6 +134,7 @@ class Game:
                                 print(dialogue.text)
 
                     if dialogue.currentStage == "True":
+                        self.dialogue_choice = 1
                         print("truetruetrue")
                         self.dialogue_root = dialogue
                         self.activeNext = True
@@ -151,9 +152,23 @@ class Game:
                                 self.wait()
 
                             try:
-                                dialogue = dialogue.next[0]
-                                print("jest next")
-                                self.activeNext = True
+                                print(self.dialogue_choice)
+                                print("CHOICE")
+                                print(dialogue.next[0].choice)
+                                for choice in range(self.dialogue_choice):
+                                    print(dialogue.next[0].choice == self.dialogue_choice)
+                                    print(dialogue.next[0].text)
+                                    if dialogue.next[0].choice == self.dialogue_choice:
+                                        print("zmieniam dialogi")
+                                        dialogue = dialogue.next[0]
+                                        print("jest next")
+                                        self.dialogue_choice = 1
+                                        self.activeNext = True
+                                    else:
+                                        print("zmieniam dialogi")
+                                        dialogue = dialogue.next[0].next[0]
+                                        print("jest next")
+                                        self.activeNext = True
                             except:
                                 self.activeNext = False
 
@@ -194,7 +209,7 @@ class Game:
             self.textRect.width = WIDTH         
             self.window.blit(self.dial_text, self.textRect)
             pygame.display.update()
-            time.sleep(0.03)
+            time.sleep(subtitles_speed)
 
     def playerChoice(self, dialogue, npcInteract):
         while True:
@@ -202,6 +217,7 @@ class Game:
                 print("wait")
                 print(dialogue.option)
                 if event.type == KEYDOWN and event.key == K_1 and dialogue.option >= 1:
+                    self.dialogue_choice = 1 
                     self.updateMap()
                     self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
                     print(self.PLAYER.CURR_QUESTS)
@@ -209,9 +225,11 @@ class Game:
                     npcInteract.dialogues[0].currentStage = "True"
                     return
                 elif event.type == KEYDOWN and event.key == K_2 and dialogue.option >= 2:
+                    self.dialogue_choice = 2
                     self.updateMap()
                     return
                 elif event.type == KEYDOWN and event.key == K_3 and dialogue.option >= 3:
+                    self.dialogue_choice = 3
                     self.updateMap()
                     return
 
