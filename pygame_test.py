@@ -42,7 +42,7 @@ class Game:
     def new(self):
         # Create objects
         self.PLAYER = player.Player()
-        #self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64.png')
+        self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64alt.png')
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
         self.load_map()
@@ -123,7 +123,7 @@ class Game:
         for npcInteract in self.activeNPC:
             if keys[pygame.K_f] and npcInteract.isCollision(player_X, player_Y):
                 print("COLLISION!!!")
-            
+
                 for dialogue in npcInteract.dialogues:
                     # check for enabling new dialogues depanding on a quest
                     if (dialogue.questId, dialogue.stage) in self.PLAYER.CURR_QUESTS.items():
@@ -141,7 +141,7 @@ class Game:
                                 if dialogue.option >= 1.0:
                                     self.playerChoice(dialogue, npcInteract)
                                 else:
-                                    self.wait()  
+                                    self.wait()
                             else:
                                 self.talkDialogue(dialogue.text)
                                 self.wait()
@@ -185,6 +185,7 @@ class Game:
         self.PLAYER.POS[0] = x
         self.PLAYER.POS[1] = y
         self.window.fill((0,0,0))
+        self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64alt.png')
         self.updateMap()
 
     def talkDialogue(self, message):
@@ -194,7 +195,7 @@ class Game:
             self.dial_text = self.font.render(new_message, True, black, white)
             self.textRect = self.dial_text.get_rect()
             self.textRect.center = (WIDTH//2, HEIGHT-0.25*TILESIZE)
-            self.textRect.width = WIDTH         
+            self.textRect.width = WIDTH
             self.window.blit(self.dial_text, self.textRect)
             pygame.display.update()
             time.sleep(subtitles_speed)
@@ -203,7 +204,7 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == KEYDOWN and event.key == K_1 and dialogue.option >= 1:
-                    self.dialogue_choice = 1 
+                    self.dialogue_choice = 1
                     self.updateMap()
                     self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
                     print("Current quests: ")
