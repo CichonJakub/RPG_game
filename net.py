@@ -33,6 +33,13 @@ class Net:
         data_dict = json.loads(data)
         otherPlayers.append(data_dict)
 
+    @sio.on('existingPlayers')
+    def on_message(data):
+        print("Existing Player:")
+        print(data)
+        data_dict = json.loads(data)
+        otherPlayers.append(data_dict)
+
     @sio.on('updateOtherPlayers')
     def on_message(data):
         data_dict = json.loads(data)
