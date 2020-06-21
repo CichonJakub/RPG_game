@@ -1,12 +1,13 @@
 import pygame
-import logging
+import random
+#import logging
 
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 #logging.debug('This will get logged')
 
 class Player:
     def __init__(self):
-        self.NAME = "TEST"
+        self.NAME = str(random.randint(1,65001))
         self.SPRITE = pygame.image.load('./BULBA64.png')
         self.MAP = "first_map.txt"
         self.POS = [0,0]

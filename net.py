@@ -1,17 +1,31 @@
 import socketio
+from typing import List
 import json
 
 sio = socketio.Client()
 
 otherPlayers = []
 
-class PlayerToSend:
+class ServerPlayer:
     def __init__(self, name, map, posX, posY, sprite):
         self.name = name
         self.map = map
         self.posX = posX
         self.posY = posY
         self.sprite = sprite
+
+    @classmethod
+    def from_json(cls, data):
+        return cls(**data)
+
+class PlayersToSend:
+    def __init__(self, players: List[ServerPlayer]):
+        self.players = players
+
+    @classmethod
+    def from_json(cls, data):
+        players = list(map(ServerPlayer.from_json, data["players"]))
+        return cls(players)
 
 class Net:
     @sio.event
@@ -28,26 +42,28 @@ class Net:
 
     @sio.on('newPlayerAnnounced')
     def on_message(data):
-        print("New Player:")
-        print(data)
+        #print("New Player:")
+        #print(data)
         data_dict = json.loads(data)
         otherPlayers.append(data_dict)
 
     @sio.on('existingPlayers')
     def on_message(data):
-        print("Existing Player:")
-        print(data)
-        data_dict = json.loads(data)
-        otherPlayers.append(data_dict)
+        #print("Existing Players:")
+        #print(data)
+        data_dict = PlayersToSend.from_json(json.loads(data))
+        otherPlayers = data_dict.players
 
     @sio.on('updateOtherPlayers')
     def on_message(data):
+        print("DATA:")
+        print(data)
         data_dict = json.loads(data)
-        modified = next((x for x in otherPlayers if x.name == data_dict['name']), None)
+        modified = next((x for x in otherPlayers if x['name'] == data_dict['name']), None)
         if modified != None:
-            modified.posX = data_dict['posX']
-            modified.posY = data_dict['posY']
-            print("PLAYER MOVEMENT UPDATED " + str(modified.posX) + " " + str(modified.posY))
+            modified['posX'] = data_dict['posX']
+            modified['posY'] = data_dict['posY']
+            print("PLAYER MOVEMENT UPDATED " + str(modified['posX']) + " " + str(modified['posY']))
 
     def connectToServer(self):
         sio.connect('http://localhost:5000')
@@ -55,11 +71,11 @@ class Net:
         #sio.wait()
 
     def putPlayer(self, name, map, posX, posY, sprite):
-        sendString = json.dumps(PlayerToSend(name, map, posX, posY, sprite).__dict__)
-        print(sendString)
+        sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
+        #print(sendString)
         sio.emit('newPlayer', sendString)
 
     def sendMove(self, name, map, posX, posY, sprite):
-        sendString = json.dumps(PlayerToSend(name, map, posX, posY, sprite).__dict__)
-        print(sendString)
+        sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
+        #print(sendString)
         sio.emit('sendMove', sendString)
