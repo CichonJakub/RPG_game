@@ -51,19 +51,22 @@ class Net:
     def on_message(data):
         #print("Existing Players:")
         #print(data)
-        data_dict = PlayersToSend.from_json(json.loads(data))
-        otherPlayers = data_dict.players
+        data_dict = json.loads(data)#PlayersToSend.from_json(json.loads(data))
+        print(data_dict)
+        otherPlayers = data_dict['players']
+        print("EXISTING ADDED")
+        #print(otherPlayers)
 
     @sio.on('updateOtherPlayers')
     def on_message(data):
-        print("DATA:")
-        print(data)
+        #print("DATA:")
+        #print(data)
         data_dict = json.loads(data)
         modified = next((x for x in otherPlayers if x['name'] == data_dict['name']), None)
         if modified != None:
             modified['posX'] = data_dict['posX']
             modified['posY'] = data_dict['posY']
-            print("PLAYER MOVEMENT UPDATED " + str(modified['posX']) + " " + str(modified['posY']))
+            #print("PLAYER MOVEMENT UPDATED " + str(modified['posX']) + " " + str(modified['posY']))
 
     def connectToServer(self):
         sio.connect('http://localhost:5000')
