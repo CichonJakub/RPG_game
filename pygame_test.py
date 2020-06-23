@@ -76,14 +76,24 @@ class Game:
         for character in self.activeNPC:
             if character.map == self.GRID.name:
                 self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
+                #self.window.blit(character.sprite,(character.position[0], character.position[1]) )
 
-        self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
         print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         # print obecnej tablicy innych graczy
         print(self.server.getOtherPlayers)
-        #print(net.otherPlayers)
+        
         for otherPlayer in self.server.getOtherPlayers:
-            self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['posX']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['posY']-(self.GRID.vertical_move*TILESIZE) ))
+            print(self.PLAYER.MAP)
+            print(otherPlayer['map'])
+            if otherPlayer['map'] == self.PLAYER.MAP:
+                print(otherPlayer['posX']-(self.GRID.horizontal_move*TILESIZE))
+                print(otherPlayer['posY']-(self.GRID.vertical_move*TILESIZE))
+                print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+                self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['posX']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['posY']-(self.GRID.vertical_move*TILESIZE) ))
+                #self.window.blit(pygame.image.load(otherPlayer['sprite']), (otherPlayer['posX'], otherPlayer['posY']) )
+
+        self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
+        
         pygame.display.update()
 
 
@@ -173,6 +183,9 @@ class Game:
                 self.PLAYER.PREV_POS.append([x, y])
                 self.PREV_GRID.append(self.GRID)
                 self.GRID = Map(locInteract.next_map)
+                self.PLAYER.MAP = self.GRID.name
+                print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                print(self.PLAYER.MAP)
                 self.obj_on_curr_map()
                 x = WIDTH//2
                 y = HEIGHT - 2*TILESIZE
@@ -184,6 +197,7 @@ class Game:
             y = self.PLAYER.PREV_POS[-1][1] + TILESIZE
             self.PLAYER.PREV_POS.pop()
             self.GRID = self.PREV_GRID[-1]
+            self.PLAYER.MAP = self.GRID.name
             self.PREV_GRID.pop()
             self.obj_on_curr_map()
 
@@ -192,7 +206,10 @@ class Game:
         self.PLAYER.POS[0] = x
         self.PLAYER.POS[1] = y
         self.window.fill((0,0,0))
-        self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64alt.png')
+        print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP")
+        print(self.PLAYER.MAP)
+        #(otherPlayer['posX']+(self.GRID.horizontal_move*TILESIZE)
+        self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, (self.PLAYER.POS[0]+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.POS[1]+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
         self.updateMap()
 
     def talkDialogue(self, message):

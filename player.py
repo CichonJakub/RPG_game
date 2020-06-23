@@ -9,7 +9,7 @@ class Player:
     def __init__(self):
         self.NAME = str(random.randint(1,65001))
         self.SPRITE = pygame.image.load('./BULBA64.png')
-        self.MAP = "first_map.txt"
+        self.MAP = "maps/second_map.txt"
         self.POS = [0,0]
         self.HEALTH = 100
         self.DIR = False

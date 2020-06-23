@@ -71,6 +71,7 @@ def on_message(sid, data):
     if modified != None:
         modified.posX = data_dict['posX']
         modified.posY = data_dict['posY']
+        modified.map = data_dict['map']
         #print("PLAYER MOVEMENT UPDATED " + str(modified.position[0]) + " " + str(modified.position[1]))
         sio.emit('updateOtherPlayers', data, skip_sid=sid)
 

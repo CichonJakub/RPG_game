@@ -68,6 +68,7 @@ class Net:
         if modified != None:
             modified['posX'] = data_dict['posX']
             modified['posY'] = data_dict['posY']
+            modified['map'] = data_dict['map']
             #print("PLAYER MOVEMENT UPDATED " + str(modified['posX']) + " " + str(modified['posY']))
 
     def connectToServer(self):
@@ -81,7 +82,10 @@ class Net:
         sio.emit('newPlayer', sendString)
 
     def sendMove(self, name, map, posX, posY, sprite):
+        print("999999999999999999999999999999999999999999999999999999999999999")
+        print(map)
         sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
+        print(map)
         #print(sendString)
         sio.emit('sendMove', sendString)
 
