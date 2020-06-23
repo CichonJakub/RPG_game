@@ -49,13 +49,15 @@ class Net:
 
     @sio.on('existingPlayers')
     def on_message(data):
+        global otherPlayers
         #print("Existing Players:")
         #print(data)
         data_dict = json.loads(data)#PlayersToSend.from_json(json.loads(data))
         print(data_dict)
         otherPlayers = data_dict['players']
         print("EXISTING ADDED")
-        #print(otherPlayers)
+        print(otherPlayers)
+        print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
     @sio.on('updateOtherPlayers')
     def on_message(data):
@@ -82,3 +84,7 @@ class Net:
         sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
         #print(sendString)
         sio.emit('sendMove', sendString)
+
+    @property
+    def getOtherPlayers(self):
+        return otherPlayers

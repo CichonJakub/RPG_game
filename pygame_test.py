@@ -43,6 +43,7 @@ class Game:
         # Create objects
         self.PLAYER = player.Player()
         self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64alt.png')
+        print("My name is... " + str(self.PLAYER.NAME))
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
         self.load_map()
@@ -77,6 +78,12 @@ class Game:
                 self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
 
         self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        # print obecnej tablicy innych graczy
+        print(self.server.getOtherPlayers)
+        #print(net.otherPlayers)
+        for otherPlayer in self.server.getOtherPlayers:
+            self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['posX']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['posY']-(self.GRID.vertical_move*TILESIZE) ))
         pygame.display.update()
 
 
