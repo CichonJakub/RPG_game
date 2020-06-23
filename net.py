@@ -56,8 +56,6 @@ class Net:
         print(data_dict)
         otherPlayers = data_dict['players']
         print("EXISTING ADDED")
-        print(otherPlayers)
-        print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
     @sio.on('updateOtherPlayers')
     def on_message(data):
@@ -82,10 +80,7 @@ class Net:
         sio.emit('newPlayer', sendString)
 
     def sendMove(self, name, map, posX, posY, sprite):
-        print("999999999999999999999999999999999999999999999999999999999999999")
-        print(map)
         sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
-        print(map)
         #print(sendString)
         sio.emit('sendMove', sendString)
 
