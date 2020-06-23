@@ -1,5 +1,6 @@
 import pygame
-
+import sys
+pygame.init()
 # game settings
 FPS = 100
 TITLE = "POKEMON"
@@ -11,10 +12,22 @@ MAPHEIGHT = 10
 WIDTH = MAPWIDTH * TILESIZE
 HEIGHT = MAPHEIGHT * TILESIZE
 MAP = 'maps/second_map.txt'
+WIDTH_BATTLE = 5 * TILESIZE
+HEIGHT_BATTLE = 5 * TILESIZE
+MAP_BATTLE = 'maps/battlefield.txt'
 
 LOCKED_TILES = ['WATER', 'STONE']
 ENTRANCE = ['DOOR']
 
+background = (43, 45, 56)
+black = (0, 0, 0)
+white = (255, 255, 255)
+red = (255, 0, 0)
+green = (0, 128, 0)
+orange = (255, 165, 0)
+yellow = (255, 255, 0)
+#font = pygame.font.SysFont(None, 20)
+font2 = pygame.font.Font('freesansbold.ttf', 24)
 # DICTIONARY LINKING TILES TO THEIR COLORS pygame.image.load('pic.png')
 TEXTURES = {
     'DIRT': pygame.image.load('textures/dirt.png'),
