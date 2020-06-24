@@ -147,6 +147,7 @@ class Game:
                         self.dialogue_root = dialogue
                         self.activeNext = True
                         while self.activeNext:
+
                             if dialogue.interact == "True":
                                 self.displayDialogue(dialogue.text)
                                 if dialogue.option >= 1.0:
@@ -156,18 +157,12 @@ class Game:
                             else:
                                 self.displayDialogue(dialogue.text)
                                 self.wait()
-
                             try:
                                 for choice in range(self.dialogue_choice):
-                                    if dialogue.next[0].choice == self.dialogue_choice:
-                                        dialogue = dialogue.next[0]
-                                        #back up to default dialogues
-                                        self.dialogue_choice = 1
-                                        self.activeNext = True
-                                    else:
-                                        #skip one dialogue option
-                                        dialogue = dialogue.next[0].next[0]
-                                        self.activeNext = True
+                                    dialogue = dialogue.next[0]
+                                if dialogue.choice != self.dialogue_choice:
+                                    dialogue = dialogue.next[0]
+                                self.dialogue_choice = 1
                             except:
                                 self.activeNext = False
 
