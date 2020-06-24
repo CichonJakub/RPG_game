@@ -12,8 +12,11 @@ class Player:
         self.MAP = "maps/second_map.txt"
         self.POS = [0,0]
         self.HEALTH = 100
+        self.GOLD = 100
+        self.EXP = 0
         self.DIR = False
         self.MOVING = False
         self.VELOCITY = 16
         self.PREV_POS = []
         self.CURR_QUESTS = {}
+        self.QUESTS_COMPLETED = []

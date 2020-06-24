@@ -1,8 +1,0 @@
-PROBLEMY - TO DO:
-	1. Jeżeli duża mapa jak obecnie second_map.txt to bohater za szybko się porusza w stosunku do przesuwania mapy
-	2. Jeżeli zostawimy działanie tak jak teraz to trzeba umieszczać przedmioty w takim miejscu aby dało się je zebrać, bo czasem buguje i nie można wejść na dane pole
-	3. Ustawić przycisk resetowania tak aby w razie czego można było sobie summon postaci w miejscu, które się rusza XD
-	4. Trzeb jakoś dziedziczyć przesuwanie mapy żeby wiedzieć w jakim miejscu startujemy, w sensie w którym miejscu mapa ma się renderować po przejściu z różnych lokacji
-	Inaczej będzie problem z kamerą
-	5. Jeżeli uda się odpowiednio renderować miejsce kamerą czyli to dziedziczenie z (pkt. 4) to wtedy będzie można summon od dołu żeby użytkownik przez przypadek
-	nie wchodził i wychodził cały czas :P

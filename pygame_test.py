@@ -9,6 +9,7 @@ from settings import *
 from map import *
 import player
 import locations
+import quests
 import npc
 import net
 
@@ -46,10 +47,9 @@ class Game:
         print("My name is... " + str(self.PLAYER.NAME))
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
+        self.QUEST = quests.importQuests(self)
         self.load_map()
         self.obj_on_curr_map()
-
-
 
     def run(self):
         ### GAME LOOP
@@ -135,7 +135,6 @@ class Game:
         for npcInteract in self.activeNPC:
             if keys[pygame.K_f] and npcInteract.isCollision(player_X, player_Y):
                 print("COLLISION!!!")
-
                 for dialogue in npcInteract.dialogues:
                     # check for enabling new dialogues depanding on a quest
                     if (dialogue.questId, dialogue.stage) in self.PLAYER.CURR_QUESTS.items():
@@ -149,13 +148,13 @@ class Game:
                         self.activeNext = True
                         while self.activeNext:
                             if dialogue.interact == "True":
-                                self.talkDialogue(dialogue.text)
+                                self.displayDialogue(dialogue.text)
                                 if dialogue.option >= 1.0:
                                     self.playerChoice(dialogue, npcInteract)
                                 else:
                                     self.wait()
                             else:
-                                self.talkDialogue(dialogue.text)
+                                self.displayDialogue(dialogue.text)
                                 self.wait()
 
                             try:
@@ -201,8 +200,9 @@ class Game:
         self.window.fill((0,0,0))
         self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, (self.PLAYER.POS[0]+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.POS[1]+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
         self.updateMap()
+        self.checkQuests()
 
-    def talkDialogue(self, message):
+    def displayDialogue(self, message):
         new_message = ""
         for letter in message:
             new_message += letter
@@ -241,6 +241,21 @@ class Game:
                 if event.type == KEYDOWN and event.key == K_n:
                     self.updateMap()
                     return
+
+    def checkQuests(self):
+        isCompleted = False
+        for quest, stage in self.PLAYER.CURR_QUESTS.items():
+            for mission in self.QUEST:
+                if quest == mission.questID:
+                    if stage == mission.endStage:
+                        self.PLAYER.QUESTS_COMPLETED.append(quest)
+                        isCompleted = True
+                if quest < mission.questID:
+                    # There is no point of checking more quests id's if current quest id is smaller because there will be no match XD
+                    break
+        if isCompleted:
+            self.PLAYER.CURR_QUESTS.pop(self.PLAYER.QUESTS_COMPLETED[-1], None)
+            print(self.PLAYER.CURR_QUESTS)
 
     def show_start_menu(self):
         # Show starting menu
