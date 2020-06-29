@@ -85,7 +85,7 @@ def hero():
     # strength, agility, intelligence, endurance, luck, charisma = 0
 
     while running:
-        screen.fill(white)
+        screen.fill(darkgray)
         make_text('Tworzenie postaci', font, black, screen, 20, 20)
         mx, my = pygame.mouse.get_pos()
 
@@ -219,8 +219,8 @@ def hero():
         #generating buttons ------------
         # pygame.draw.rect(screen, green, button_strength_add)
         # pygame.draw.rect(screen, red, button_strength_reduce)
-        pygame.draw.rect(screen, plus2, button_agility_add)
-        pygame.draw.rect(screen, minus2, button_agility_reduce)
+        pygame.draw.rect(screen, aliceblue, button_agility_add)
+        pygame.draw.rect(screen, aliceblue, button_agility_reduce)
         pygame.draw.rect(screen, green, button_intelligence_add)
         pygame.draw.rect(screen, red, button_intelligence_reduce)
         pygame.draw.rect(screen, green, button_endurance_add)
@@ -231,6 +231,9 @@ def hero():
         pygame.draw.rect(screen, red, button_charisma_reduce)
         pygame.draw.rect(screen, yellow, button_submit)
         click = False
+
+        screen.blit(minus2, button_agility_add)
+        screen.blit(plus2, button_agility_reduce)
 
         for event in pygame.event.get():
             if event.type == QUIT:
