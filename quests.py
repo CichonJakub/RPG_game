@@ -15,9 +15,9 @@ class QUESTS:
         self.stage = cellsArray[1]
         self.endStage = cellsArray[2]
         self.desc = cellsArray[3]
-        self.reward = cellsArray[4]
-        self.exp = cellsArray[5]  
-        self.next = []
+        self.gold = cellsArray[4]
+        self.item = cellsArray[5]
+        self.exp = cellsArray[6]  
 
 def importQuests(self):
     questArray = []
