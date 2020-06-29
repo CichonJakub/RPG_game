@@ -28,6 +28,16 @@ orange = (255, 165, 0)
 yellow = (255, 255, 0)
 #font = pygame.font.SysFont(None, 20)
 font2 = pygame.font.Font('freesansbold.ttf', 24)
+
+
+plus2 = pygame.image.load('textures\signs\plus2.png')
+plus2 = pygame.transform.scale(plus2, (76, 76))
+
+
+minus2 = pygame.image.load('textures\signs\minus2.png')
+minus2 = pygame.transform.scale(minus2, (76, 76))
+
+
 # DICTIONARY LINKING TILES TO THEIR COLORS pygame.image.load('pic.png')
 TEXTURES = {
     'DIRT': pygame.image.load('textures/dirt.png'),

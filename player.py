@@ -10,7 +10,7 @@ class Player:
         self.NAME = str(random.randint(1,65001))
         self.SPRITE = pygame.image.load('./BULBA64.png')
         self.MAP = "maps/second_map.txt"
-        self.POS = [0,0]
+        self.POS = [0, 0]
         self.HEALTH = 100
         self.GOLD = 100
         self.EXP = 0

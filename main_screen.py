@@ -1,5 +1,7 @@
 import pygame
 import sys
+from settings import *
+
 
 mainClock = pygame.time.Clock()
 from pygame.locals import *
@@ -87,27 +89,30 @@ def hero():
         make_text('Tworzenie postaci', font, black, screen, 20, 20)
         mx, my = pygame.mouse.get_pos()
 
+        screen.blit(minus2, (200, 100))
+        screen.blit(plus2, (300, 100))
+
         #strength --------------------
-        button_strength_add = pygame.Rect(200, 100, 50, 50)
-        button_strength_reduce = pygame.Rect(300, 100, 50, 50)
-
-        make_text(f'Twojr punkty siły: {strength}', font, black, screen, 400, 100)
-
-        if button_strength_add.collidepoint((mx, my)):
-            if click:
-                if available_points > 0:
-                    available_points -= 1
-                    strength += 1
-
-        if button_strength_reduce.collidepoint((mx, my)):
-            if click:
-                if strength > 0:
-                    strength -= 1
-                    available_points += 1
+        # button_strength_add = pygame.Rect(200, 100, 50, 50)
+        # button_strength_reduce = pygame.Rect(300, 100, 50, 50)
+        #
+        # make_text(f'Twojr punkty siły: {strength}', font, black, screen, 400, 100)
+        #
+        # if button_strength_add.collidepoint((mx, my)):
+        #     if click:
+        #         if available_points > 0:
+        #             available_points -= 1
+        #             strength += 1
+        #
+        # if button_strength_reduce.collidepoint((mx, my)):
+        #     if click:
+        #         if strength > 0:
+        #             strength -= 1
+        #             available_points += 1
 
         #agility-----------------------
-        button_agility_add = pygame.Rect(200, 200, 50, 50)
-        button_agility_reduce = pygame.Rect(300, 200, 50, 50)
+        button_agility_add = pygame.Rect(200, 200, 76, 76)
+        button_agility_reduce = pygame.Rect(300, 200, 76, 76)
 
         make_text(f'Twojr punkty zrecznosci: {agility}', font, black, screen, 400, 200)
 
@@ -212,10 +217,10 @@ def hero():
                     # dodac do tablicy
 
         #generating buttons ------------
-        pygame.draw.rect(screen, green, button_strength_add)
-        pygame.draw.rect(screen, red, button_strength_reduce)
-        pygame.draw.rect(screen, green, button_agility_add)
-        pygame.draw.rect(screen, red, button_agility_reduce)
+        # pygame.draw.rect(screen, green, button_strength_add)
+        # pygame.draw.rect(screen, red, button_strength_reduce)
+        pygame.draw.rect(screen, plus2, button_agility_add)
+        pygame.draw.rect(screen, minus2, button_agility_reduce)
         pygame.draw.rect(screen, green, button_intelligence_add)
         pygame.draw.rect(screen, red, button_intelligence_reduce)
         pygame.draw.rect(screen, green, button_endurance_add)
