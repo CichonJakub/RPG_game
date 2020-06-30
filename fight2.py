@@ -24,10 +24,10 @@ class Worrior():
         self.pa = pa
 
     def attack(self):
-        return random.randint(0, self.ad)
+        return random.randint(min(10, self.ad), max(10, self.ad))
 
     def defence(self):
-        return random.randint(0, self.arm)
+        return random.randint(min(10, self.arm), max(10, self.arm))
 
     def lost_hp(self, amount):
         self.hp -= amount
