@@ -9,17 +9,18 @@ class Worrior():
         self.hp = hp
         self.ad = ad
         self.arm = arm
+        self.pa = pa
         self.sprite = pygame.image.load(sprite)
         self.position_x = position_x
         self.position_y = position_y
-        self.pa = pa
+        self.prev_pos = []
         self.map = "maps/second_map.txt"
+        self.prev_map = []
         self.gold = 100
         self.exp = 0
         self.dir = False
         self.moving = False
         self.velocity = 16
-        self.prev_pos = []
         self.curr_quests = {}
         self.quests_completed = []
 

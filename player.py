@@ -20,3 +20,4 @@ class Player:
         self.PREV_POS = []
         self.CURR_QUESTS = {}
         self.QUESTS_COMPLETED = []
+        

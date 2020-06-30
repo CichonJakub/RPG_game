@@ -25,7 +25,8 @@ class Game:
         self.server.connectToServer()
 
     def load_map(self):
-        self.GRID = Map(MAP)
+        self.GRID = Map(self.PLAYER.map)
+        #self.GRID = Map(MAP)
         self.PREV_GRID = []
 
     def obj_on_curr_map(self):
@@ -42,7 +43,8 @@ class Game:
 
     def new(self):
         # Create objects
-        self.PLAYER = worrior.Worrior()
+        self.PLAYER = worrior.Worrior(name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10)
+        #def __init__(self, name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10):
         self.server.putPlayer(self.PLAYER.name, self.PLAYER.map, self.PLAYER.position_x, self.PLAYER.position_y, './BULBA64alt.png')
         print("My name is... " + str(self.PLAYER.name))
         self.NPC = npc.importNpc(self)
@@ -172,7 +174,8 @@ class Game:
         for locInteract in self.activeLoc:
             if locInteract.checkInteraction(player_X, player_Y):
                 self.PLAYER.prev_pos.append([x, y])
-                self.PREV_GRID.append(self.GRID)
+                #self.PREV_GRID.append(self.GRID)
+                self.PLAYER.prev_map.append(self.GRID.name)
                 self.GRID = Map(locInteract.next_map)
                 self.PLAYER.map = self.GRID.name
                 self.obj_on_curr_map()
@@ -185,9 +188,11 @@ class Game:
             x = self.PLAYER.prev_pos[-1][0]
             y = self.PLAYER.prev_pos[-1][1] + TILESIZE
             self.PLAYER.prev_pos.pop()
-            self.GRID = self.PREV_GRID[-1]
+            #self.GRID = self.PREV_GRID[-1]
+            self.GRID = Map(self.PLAYER.prev_map[-1])
             self.PLAYER.map = self.GRID.name
-            self.PREV_GRID.pop()
+            #self.PREV_GRID.pop()
+            self.PLAYER.prev_map.pop()
             self.obj_on_curr_map()
 
 
