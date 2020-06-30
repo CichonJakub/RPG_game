@@ -160,8 +160,10 @@ class Game:
                             try:
                                 for choice in range(self.dialogue_choice):
                                     dialogue = dialogue.next[0]
+                                print(dialogue.choice)
                                 if dialogue.choice != self.dialogue_choice:
-                                    dialogue = dialogue.next[0]
+                                    while dialogue.choice != self.dialogue_choice:
+                                        dialogue = dialogue.next[0]
                                 self.dialogue_choice = 1
                             except:
                                 self.activeNext = False
@@ -200,6 +202,7 @@ class Game:
     def displayDialogue(self, message):
         new_message = ""
         for letter in message:
+            
             new_message += letter
             self.dial_text = self.font.render(new_message, True, black, white)
             self.textRect = self.dial_text.get_rect()
@@ -208,7 +211,7 @@ class Game:
             self.window.blit(self.dial_text, self.textRect)
             pygame.display.update()
             time.sleep(subtitles_speed)
-
+    
     def playerChoice(self, dialogue, npcInteract):
         while True:
             for event in pygame.event.get():
@@ -223,6 +226,14 @@ class Game:
                     return
                 elif event.type == KEYDOWN and event.key == K_2 and dialogue.option >= 2:
                     self.dialogue_choice = 2
+                    tmpDialogue = dialogue.next[0].next[0]
+                    if tmpDialogue.quest != 0:
+                        print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROZNYYYYYYYYYYYYYYYYYYYYYY")
+                        self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
+                        print("Current quests: ")
+                        print(self.PLAYER.CURR_QUESTS)
+                        npcInteract.dialogues.remove(self.dialogue_root)
+                        npcInteract.dialogues[0].currentStage = "True"
                     self.updateMap()
                     return
                 elif event.type == KEYDOWN and event.key == K_3 and dialogue.option >= 3:
@@ -244,6 +255,8 @@ class Game:
                 if quest == mission.questID:
                     if stage == mission.endStage:
                         self.PLAYER.QUESTS_COMPLETED.append(quest)
+                        self.PLAYER.GOLD += mission.gold
+                        self.PLAYER.EXP += mission.exp
                         isCompleted = True
                 if quest < mission.questID:
                     # There is no point of checking more quests id's if current quest id is smaller because there will be no match XD
@@ -251,6 +264,8 @@ class Game:
         if isCompleted:
             self.PLAYER.CURR_QUESTS.pop(self.PLAYER.QUESTS_COMPLETED[-1], None)
             print(self.PLAYER.CURR_QUESTS)
+            print(self.PLAYER.EXP)
+            print(self.PLAYER.GOLD)
 
     def show_start_menu(self):
         # Show starting menu
