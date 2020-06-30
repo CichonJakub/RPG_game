@@ -4,6 +4,7 @@ import json
 
 sio = socketio.Client()
 
+allPlayers = []
 otherPlayers = []
 
 class ServerPlayer:
@@ -39,6 +40,13 @@ class Net:
     @sio.event
     def disconnect():
         print('disconnected from server')
+
+    @sio.on('allPlayersTable')
+    def on_message(data):
+        print("ALL PLAYERS:")
+        print(data)
+        print(len(json.loads(data)))
+        allPlayers = json.loads(data)
 
     @sio.on('newPlayerAnnounced')
     def on_message(data):
@@ -87,3 +95,21 @@ class Net:
     @property
     def getOtherPlayers(self):
         return otherPlayers
+
+    @property
+    def getAllPlayers(self):
+        return allPlayers
+
+def is_in_DB(nick):
+    playerData = next((x for x in allPlayers if x['name'] == nick), None)
+    if playerData == None:
+        return False
+    else:
+        return True
+
+def askForPlayerData(nick):
+    playerData = next((x for x in allPlayers if x['name'] == nick), None)
+    if playerData == None:
+        return None
+    else:
+        return playerData
