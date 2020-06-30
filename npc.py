@@ -20,7 +20,10 @@ class NPC:
         self.position = [int(cellsArray[2]), int(cellsArray[3])]
         self.sprite = pygame.image.load("./textures/characters/" + cellsArray[4])
         self.dialogues = []
-
+        self.name = cellsArray[5]
+        self.hp = cellsArray[6]
+        self.ad = cellsArray[7]
+        self.arm = cellsArray[8]
         # Collision coordinates
         self.npc_left_dialogue = self.position[0] - 0.5*TILESIZE
         self.npc_right_dialogue = self.position[0] + 0.5*TILESIZE
