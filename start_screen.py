@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+import net
 
 def make_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
@@ -8,8 +9,8 @@ def make_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 
-def is_in_DB(nick):
-    return False
+#def is_in_DB(nick):
+#    return False
 
 screen = pg.display.set_mode((1280, 720))
 font = pg.font.Font(None, 32)
@@ -58,8 +59,10 @@ def main_menu():
                         nick = text
                         print(text)
                         text = ''
-                        if is_in_DB(nick):
+                        print(net.is_in_DB(nick))
+                        if net.is_in_DB(nick):
                            #pobiera cechy z DB i tworzy nowa gre tutaj
+                           print(net.askForPlayerData(nick))
                            zaladuj_postac = True
                            Otworz_gre = True
                            sdax = 1
