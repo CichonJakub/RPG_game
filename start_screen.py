@@ -21,7 +21,7 @@ pg.init()
 click = False
 
 
-def main():
+def main_menu():
     # screen = pg.display.set_mode((1280, 720))
     # font = pg.font.Font(None, 32)
     # font2 = pg.font.Font(None, 64)
@@ -304,7 +304,9 @@ def create_champ(nick):
         clock.tick(60)
 
 
-if __name__ == '__main__':
-    pg.init()
-    main()
-    pg.quit()
+# if __name__ == '__main__':
+#     pg.init()
+#     main()
+#     pg.quit()
+
+main_menu()
