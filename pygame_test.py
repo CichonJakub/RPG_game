@@ -7,7 +7,7 @@ from pygame.locals import *
 import time
 from settings import *
 from map import *
-import player
+import worrior
 import locations
 import quests
 import npc
@@ -42,9 +42,9 @@ class Game:
 
     def new(self):
         # Create objects
-        self.PLAYER = player.Player()
-        self.server.putPlayer(self.PLAYER.NAME, self.PLAYER.MAP, self.PLAYER.POS[0], self.PLAYER.POS[1], './BULBA64alt.png')
-        print("My name is... " + str(self.PLAYER.NAME))
+        self.PLAYER = worrior.Worrior()
+        self.server.putPlayer(self.PLAYER.name, self.PLAYER.map, self.PLAYER.position_x, self.PLAYER.position_y, './BULBA64alt.png')
+        print("My name is... " + str(self.PLAYER.name))
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
         self.QUEST = quests.importQuests(self)
@@ -73,21 +73,21 @@ class Game:
             if location.map == self.GRID.name:
                 self.window.blit(location.sprite,(location.position[0]-(self.GRID.horizontal_move*TILESIZE), location.position[1]-(self.GRID.vertical_move*TILESIZE) ))
 
-        for character in self.activeNPC:
-            if character.map == self.GRID.name:
-                self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
-
         print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         # print obecnej tablicy innych graczy
         print(self.server.getOtherPlayers)
         
         for otherPlayer in self.server.getOtherPlayers:
-            print(self.PLAYER.MAP)
+            print(self.PLAYER.map)
             print(otherPlayer['map'])
-            if otherPlayer['map'] == self.PLAYER.MAP:
+            if otherPlayer['map'] == self.PLAYER.map:
                 self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['posX']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['posY']-(self.GRID.vertical_move*TILESIZE) ))
 
-        self.window.blit(self.PLAYER.SPRITE,self.PLAYER.POS)
+        for character in self.activeNPC:
+            if character.map == self.GRID.name:
+                self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
+
+        self.window.blit(self.PLAYER.sprite, (self.PLAYER.position_x, self.PLAYER.position_y) )
         
         pygame.display.update()
 
@@ -99,8 +99,8 @@ class Game:
                 self.quit()
 
         keys = pygame.key.get_pressed()
-        x = self.PLAYER.POS[0]
-        y = self.PLAYER.POS[1]
+        x = self.PLAYER.position_x
+        y = self.PLAYER.position_y
 
         player_X = x + (self.GRID.horizontal_move * TILESIZE)
         player_Y = y + (self.GRID.vertical_move * TILESIZE)
@@ -109,25 +109,25 @@ class Game:
         if keys[pygame.K_LEFT] and x > 0:
           # ABS potrzebny bo macierz może zczytywac z ujemnych wartości
             if self.GRID.data[y//TILESIZE + self.GRID.vertical_move][abs(x//TILESIZE + self.GRID.horizontal_move - 1)] not in LOCKED_TILES: # BLOKADA PRZED WEJŚĆIEM NA WODE
-                x -= self.PLAYER.VELOCITY
+                x -= self.PLAYER.velocity
                 if x % TILESIZE == 0 and self.GRID.horizontal_move > self.GRID.MARGIN_LEFT:
                     self.GRID.horizontal_move -= 1
 
         if keys[pygame.K_RIGHT] and x < WIDTH - TILESIZE:
             if self.GRID.data[y//TILESIZE + self.GRID.vertical_move][x//TILESIZE + self.GRID.horizontal_move + 1] not in LOCKED_TILES:  # BLOKADA PRZED WEJŚĆIEM NA WODE
-                x += self.PLAYER.VELOCITY
+                x += self.PLAYER.velocity
                 if x % TILESIZE == 0 and self.GRID.horizontal_move < self.GRID.MARGIN_RIGHT:
                     self.GRID.horizontal_move += 1
 
         if keys[pygame.K_DOWN] and y < HEIGHT - TILESIZE:
             if self.GRID.data[y//TILESIZE + self.GRID.vertical_move + 1][x//TILESIZE + self.GRID.horizontal_move] not in LOCKED_TILES:  # BLOKADA PRZED WEJŚĆIEM NA WODE
-                y += self.PLAYER.VELOCITY
+                y += self.PLAYER.velocity
                 if y % TILESIZE == 0 and self.GRID.vertical_move < self.GRID.MARGIN_BOTTOM:
                     self.GRID.vertical_move += 1
 
         if keys[pygame.K_UP] and y > 0:
             if self.GRID.data[abs( (y//TILESIZE) + self.GRID.vertical_move - 1)][x//TILESIZE + self.GRID.horizontal_move] not in LOCKED_TILES:  # BLOKADA PRZED WEJŚĆIEM NA WODE
-                y -= self.PLAYER.VELOCITY
+                y -= self.PLAYER.velocity
                 if y % TILESIZE == 0 and self.GRID.vertical_move > self.GRID.MARGIN_UP:
                     self.GRID.vertical_move -= 1
 
@@ -137,7 +137,7 @@ class Game:
                 print("COLLISION!!!")
                 for dialogue in npcInteract.dialogues:
                     # check for enabling new dialogues depanding on a quest
-                    if (dialogue.questId, dialogue.stage) in self.PLAYER.CURR_QUESTS.items():
+                    if (dialogue.questId, dialogue.stage) in self.PLAYER.curr_quests.items():
                            if dialogue.npc == npcInteract.npc_id:
                                 dialogue.currentStage = "True"
                                 print(dialogue.text)
@@ -171,10 +171,10 @@ class Game:
         # Enter the location
         for locInteract in self.activeLoc:
             if locInteract.checkInteraction(player_X, player_Y):
-                self.PLAYER.PREV_POS.append([x, y])
+                self.PLAYER.prev_pos.append([x, y])
                 self.PREV_GRID.append(self.GRID)
                 self.GRID = Map(locInteract.next_map)
-                self.PLAYER.MAP = self.GRID.name
+                self.PLAYER.map = self.GRID.name
                 self.obj_on_curr_map()
                 x = WIDTH//2
                 y = HEIGHT - 2*TILESIZE
@@ -182,20 +182,20 @@ class Game:
 
         # Leave the location
         if self.GRID.data[ (y//TILESIZE) + self.GRID.vertical_move ][x//TILESIZE + self.GRID.horizontal_move] in ENTRANCE:
-            x = self.PLAYER.PREV_POS[-1][0]
-            y = self.PLAYER.PREV_POS[-1][1] + TILESIZE
-            self.PLAYER.PREV_POS.pop()
+            x = self.PLAYER.prev_pos[-1][0]
+            y = self.PLAYER.prev_pos[-1][1] + TILESIZE
+            self.PLAYER.prev_pos.pop()
             self.GRID = self.PREV_GRID[-1]
-            self.PLAYER.MAP = self.GRID.name
+            self.PLAYER.map = self.GRID.name
             self.PREV_GRID.pop()
             self.obj_on_curr_map()
 
 
         #updates
-        self.PLAYER.POS[0] = x
-        self.PLAYER.POS[1] = y
+        self.PLAYER.position_x = x
+        self.PLAYER.position_y = y
         self.window.fill((0,0,0))
-        self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, (self.PLAYER.POS[0]+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.POS[1]+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
+        self.server.sendMove(self.PLAYER.name, self.PLAYER.map, (self.PLAYER.position_x+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.position_y+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
         self.updateMap()
         self.checkQuests()
 
@@ -218,20 +218,20 @@ class Game:
                 if event.type == KEYDOWN and event.key == K_1 and dialogue.option >= 1:
                     self.dialogue_choice = 1
                     self.updateMap()
-                    self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
+                    self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
                     print("Current quests: ")
-                    print(self.PLAYER.CURR_QUESTS)
+                    print(self.PLAYER.curr_quests)
                     npcInteract.dialogues.remove(self.dialogue_root)
                     npcInteract.dialogues[0].currentStage = "True"
                     return
                 elif event.type == KEYDOWN and event.key == K_2 and dialogue.option >= 2:
                     self.dialogue_choice = 2
                     tmpDialogue = dialogue.next[0].next[0]
-                    if tmpDialogue.quest != 0:
+                    if tmpDialogue.questId != 0:
                         print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROZNYYYYYYYYYYYYYYYYYYYYYY")
-                        self.PLAYER.CURR_QUESTS[dialogue.questId] = dialogue.stage + 1.0
+                        self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
                         print("Current quests: ")
-                        print(self.PLAYER.CURR_QUESTS)
+                        print(self.PLAYER.curr_quests)
                         npcInteract.dialogues.remove(self.dialogue_root)
                         npcInteract.dialogues[0].currentStage = "True"
                     self.updateMap()
@@ -250,22 +250,22 @@ class Game:
 
     def checkQuests(self):
         isCompleted = False
-        for quest, stage in self.PLAYER.CURR_QUESTS.items():
+        for quest, stage in self.PLAYER.curr_quests.items():
             for mission in self.QUEST:
                 if quest == mission.questID:
                     if stage == mission.endStage:
-                        self.PLAYER.QUESTS_COMPLETED.append(quest)
-                        self.PLAYER.GOLD += mission.gold
-                        self.PLAYER.EXP += mission.exp
+                        self.PLAYER.quests_completed.append(quest)
+                        self.PLAYER.gold += mission.gold
+                        self.PLAYER.exp += mission.exp
                         isCompleted = True
                 if quest < mission.questID:
                     # There is no point of checking more quests id's if current quest id is smaller because there will be no match XD
                     break
         if isCompleted:
-            self.PLAYER.CURR_QUESTS.pop(self.PLAYER.QUESTS_COMPLETED[-1], None)
-            print(self.PLAYER.CURR_QUESTS)
-            print(self.PLAYER.EXP)
-            print(self.PLAYER.GOLD)
+            self.PLAYER.curr_quests.pop(self.PLAYER.quests_completed[-1], None)
+            print(self.PLAYER.curr_quests)
+            print(self.PLAYER.exp)
+            print(self.PLAYER.gold)
 
     def show_start_menu(self):
         # Show starting menu

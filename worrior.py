@@ -4,7 +4,7 @@ from settings import *
 
 
 class Worrior():
-    def __init__(self, name='xyz', sprite='',position_x=0, position_y=0, hp=0, ad=0, arm=0, pa=10):
+    def __init__(self, name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10):
         self.name = name
         self.hp = hp
         self.ad = ad
@@ -13,6 +13,16 @@ class Worrior():
         self.position_x = position_x
         self.position_y = position_y
         self.pa = pa
+        self.map = "maps/second_map.txt"
+        self.gold = 100
+        self.exp = 0
+        self.dir = False
+        self.moving = False
+        self.velocity = 16
+        self.prev_pos = []
+        self.curr_quests = {}
+        self.quests_completed = []
+
 
     def attack(self):
         return random.randint(0, self.ad)
