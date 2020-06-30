@@ -1,4 +1,11 @@
-[
-    {"name": "Test123"},
-    {"name": "Test321"}
-]
+{
+    "players": [
+        {
+            "map": "maps/second_map.txt",
+            "name": "xyz",
+            "posX": 160,
+            "posY": 128,
+            "sprite": "./BULBA64alt.png"
+        }
+    ]
+}

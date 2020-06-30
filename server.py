@@ -2,7 +2,6 @@ import eventlet
 import socketio
 from typing import List
 import json
-from threading import Timer
 
 class ServerPlayer:
     def __init__(self, name, map, posX, posY, sprite):
@@ -39,13 +38,13 @@ def loadPlayersBase():
         return players
 
 def savePlayersBase():
-    print("SAVING FUNCTION")
-    with open('playersBase.json', 'w') as jsonFile:
         print("SAVING PLAYERS TO FILE")
-        json.dump(players, jsonFile)
+        file = open("playersBase.json","w") 
+        arrayToSave = PlayersToSend(players)
+        jsonString = json.dumps(arrayToSave, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        file.write(jsonString)
+        file.close()
         print("SAVING DONE")
-        jsonFile.close()
-    Timer(5.0, savePlayersBase).start()
 
 loadPlayersBase()
 
@@ -108,6 +107,7 @@ def on_message(sid, data):
         modified.map = data_dict['map']
         #print("PLAYER MOVEMENT UPDATED " + str(modified.position[0]) + " " + str(modified.position[1]))
         sio.emit('updateOtherPlayers', data, skip_sid=sid)
+        savePlayersBase()
 
 @sio.event
 def disconnect(sid):
@@ -115,5 +115,3 @@ def disconnect(sid):
 
 if __name__ == '__main__':
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
-
-Timer(5.0, savePlayersBase).start()
