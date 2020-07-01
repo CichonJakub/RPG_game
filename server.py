@@ -111,11 +111,21 @@ def on_message(sid, data):
         modified['map'] = data_dict['map']
         #print("PLAYER MOVEMENT UPDATED " + str(modified.position[0]) + " " + str(modified.position[1]))
         sio.emit('updateOtherPlayers', data, skip_sid=sid)
-        savePlayersBase()
+        #savePlayersBase()
 
 @sio.event
 def disconnect(sid):
     print('disconnect ', sid)
+
+@sio.on('sendExitSignal')
+def on_message(sid, data):
+    print("PLAYER DISCONNECTING")
+    global activePlayers
+    data_dict = json.loads(data)
+    print(activePlayers)
+    activePlayers = list(filter(lambda i: i['name'] == data_dict['name'], activePlayers))
+    sio.emit('playerDeleted', data, skip_sid=sid)
+    savePlayersBase()
 
 if __name__ == '__main__':
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)

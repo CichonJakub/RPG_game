@@ -79,6 +79,12 @@ class Net:
             modified['map'] = data_dict['map']
             #print("PLAYER MOVEMENT UPDATED " + str(modified['posX']) + " " + str(modified['posY']))
 
+    @sio.on('playerDeleted')
+    def on_message(data):
+        data_dict = json.loads(data)
+        modified = next((x for x in otherPlayers if x['name'] == data_dict['name']), None)
+        otherPlayers.remove(modified)
+
     def connectToServer(self):
         sio.connect('http://localhost:5000')
         sio.emit('hello', 'message from the CLIENT')
@@ -93,6 +99,11 @@ class Net:
         sendString = json.dumps(worriorObject.__dict__)
         #print(sendString)
         sio.emit('sendMove', sendString)
+
+    def sendExitSignal(self, worriorObject):
+        sendString = json.dumps(worriorObject.__dict__)
+        #print(sendString)
+        sio.emit('sendExitSignal', sendString)
 
     @property
     def getOtherPlayers(self):
