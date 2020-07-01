@@ -1,11 +1,4 @@
 {
     "players": [
-        {
-            "map": "maps/second_map.txt",
-            "name": "xyz",
-            "posX": 320,
-            "posY": 256,
-            "sprite": "./BULBA64alt.png"
-        }
     ]
 }
