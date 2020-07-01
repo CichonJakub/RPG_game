@@ -45,3 +45,7 @@ class Worrior():
     # wypisywanie imion, przeładowanie funkcji, jak print(objekt) to wyswietli sie tylko imie
     def __str__(self):
         return self.name
+
+    @classmethod
+    def from_json(cls, data):
+        return cls(**data)

@@ -47,7 +47,7 @@ class Game:
         # Create objects
         self.PLAYER = worrior.Worrior(name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10)
         #def __init__(self, name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10):
-        self.server.putPlayer(self.PLAYER.name, self.PLAYER.map, self.PLAYER.position_x, self.PLAYER.position_y, './BULBA64alt.png')
+        self.server.putPlayer(self.PLAYER)
         print("My name is... " + str(self.PLAYER.name))
         self.NPC = npc.importNpc(self)
         self.LOC = locations.importLocations(self)
@@ -80,7 +80,7 @@ class Game:
         print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         # print obecnej tablicy innych graczy
         print(self.server.getOtherPlayers)
-        
+
         for otherPlayer in self.server.getOtherPlayers:
             print(self.PLAYER.map)
             print(otherPlayer['map'])
@@ -92,7 +92,7 @@ class Game:
                 self.window.blit(character.sprite,(character.position_x-(self.GRID.horizontal_move*TILESIZE), character.position_y-(self.GRID.vertical_move*TILESIZE) ))
 
         self.window.blit(self.PLAYER.sprite, (self.PLAYER.position_x, self.PLAYER.position_y) )
-        
+
         pygame.display.update()
 
 
@@ -202,14 +202,14 @@ class Game:
         self.PLAYER.position_x = x
         self.PLAYER.position_y = y
         self.window.fill((0,0,0))
-        self.server.sendMove(self.PLAYER.name, self.PLAYER.map, (self.PLAYER.position_x+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.position_y+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
+        self.server.sendMove(self.PLAYER)
         self.updateMap()
         self.checkQuests()
 
     def displayDialogue(self, message):
         new_message = ""
         for letter in message:
-            
+
             new_message += letter
             self.dial_text = self.font.render(new_message, True, black, white)
             self.textRect = self.dial_text.get_rect()
@@ -218,7 +218,7 @@ class Game:
             self.window.blit(self.dial_text, self.textRect)
             pygame.display.update()
             time.sleep(subtitles_speed)
-    
+
     def playerChoice(self, dialogue, npcInteract):
         while True:
             for event in pygame.event.get():
@@ -254,7 +254,7 @@ class Game:
                     return
                 elif event.type == KEYDOWN and event.key == K_3 and dialogue.option >= 3:
                     # Fight init
-                    # Sprawdzenie czy dialog na ktory wskazuje nastepna opcja to fight jeśli tak to inincjujemy walkę 
+                    # Sprawdzenie czy dialog na ktory wskazuje nastepna opcja to fight jeśli tak to inincjujemy walkę
                     # Przyznawanie jakiś nagród za pokonanie przeciwnika ??? Jak na razie walka tylko przykładowa i powrót do gry po wygranej walce
                     # Pytanie jak rozpatrujemy przegraną walkę ? Wyświetlenie Game Over i usunięcie z DB ?
                     self.dialogue_choice = 3
@@ -313,7 +313,7 @@ class Game:
             self.activeNPC.remove(npcInteract)
             self.NPC.remove(npcInteract)
 
-            
+
 
     def show_start_menu(self):
         # Show starting menu

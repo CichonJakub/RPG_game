@@ -2,6 +2,7 @@ import eventlet
 import socketio
 from typing import List
 import json
+from worrior import Worrior
 
 class ServerPlayer:
     def __init__(self, name, map, posX, posY, sprite):
@@ -16,12 +17,12 @@ class ServerPlayer:
         return cls(**data)
 
 class PlayersToSend:
-    def __init__(self, players: List[ServerPlayer]):
+    def __init__(self, players: List[Worrior]):
         self.players = players
 
     @classmethod
     def from_json(cls, data):
-        players = list(map(ServerPlayer.from_json, data["players"]))
+        players = list(map(Worrior.from_json, data["players"]))
         return cls(players)
 
 players = []
@@ -39,7 +40,7 @@ def loadPlayersBase():
 
 def savePlayersBase():
         print("SAVING PLAYERS TO FILE")
-        file = open("playersBase.json","w") 
+        file = open("playersBase.json","w")
         arrayToSave = PlayersToSend(players)
         jsonString = json.dumps(arrayToSave, default=lambda o: o.__dict__, sort_keys=True, indent=4)
         file.write(jsonString)
@@ -77,7 +78,7 @@ def on_message(sid, data):
     #print(data)
     data_dict = json.loads(data)
     #print(data_dict)
-    player = ServerPlayer(data_dict['name'], data_dict['map'], data_dict['posX'], data_dict['posY'], data_dict['sprite'])
+    player = data_dict
     #print(sid + " " + data_dict['name'] + " " + data_dict['map'])
     existingPlayer = next((x for x in players if x['name'] == data_dict['name']), None)
     if existingPlayer == None:
@@ -102,8 +103,8 @@ def on_message(sid, data):
         modifiedPlayer = data_dict
     modified = next((x for x in activePlayers if x.name == data_dict['name']), None)
     if modified != None:
-        modified.posX = data_dict['posX']
-        modified.posY = data_dict['posY']
+        modified.position_x = data_dict['position_x']
+        modified.position_y = data_dict['position_y']
         modified.map = data_dict['map']
         #print("PLAYER MOVEMENT UPDATED " + str(modified.position[0]) + " " + str(modified.position[1]))
         sio.emit('updateOtherPlayers', data, skip_sid=sid)

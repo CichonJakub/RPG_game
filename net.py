@@ -1,6 +1,7 @@
 import socketio
 from typing import List
 import json
+from worrior import Worrior
 
 sio = socketio.Client()
 
@@ -20,12 +21,12 @@ class ServerPlayer:
         return cls(**data)
 
 class PlayersToSend:
-    def __init__(self, players: List[ServerPlayer]):
+    def __init__(self, players: List[Worrior]):
         self.players = players
 
     @classmethod
     def from_json(cls, data):
-        players = list(map(ServerPlayer.from_json, data["players"]))
+        players = list(map(Worrior.from_json, data["players"]))
         return cls(players)
 
 class Net:
@@ -72,8 +73,8 @@ class Net:
         data_dict = json.loads(data)
         modified = next((x for x in otherPlayers if x['name'] == data_dict['name']), None)
         if modified != None:
-            modified['posX'] = data_dict['posX']
-            modified['posY'] = data_dict['posY']
+            modified['position_x'] = data_dict['position_x']
+            modified['position_y'] = data_dict['position_y']
             modified['map'] = data_dict['map']
             #print("PLAYER MOVEMENT UPDATED " + str(modified['posX']) + " " + str(modified['posY']))
 
@@ -82,13 +83,13 @@ class Net:
         sio.emit('hello', 'message from the CLIENT')
         #sio.wait()
 
-    def putPlayer(self, name, map, posX, posY, sprite):
-        sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
+    def putPlayer(self, worriorObject):
+        sendString = json.dumps(worriorObject.__dict__)
         #print(sendString)
         sio.emit('newPlayer', sendString)
 
-    def sendMove(self, name, map, posX, posY, sprite):
-        sendString = json.dumps(ServerPlayer(name, map, posX, posY, sprite).__dict__)
+    def sendMove(self, worriorObject):
+        sendString = json.dumps(worriorObject.__dict__)
         #print(sendString)
         sio.emit('sendMove', sendString)
 
