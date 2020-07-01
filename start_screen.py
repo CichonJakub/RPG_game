@@ -27,7 +27,7 @@ click = False
 done = False
 hero = Worrior()
 
-def main_menu():
+def main_menu(self, player_list):
     # screen = pg.display.set_mode((1280, 720))
     # font = pg.font.Font(None, 32)
     # font2 = pg.font.Font(None, 64)
@@ -67,20 +67,16 @@ def main_menu():
                         print(text)
                         text = ''
                         print(net.is_in_DB(nick))
-                        if net.is_in_DB(nick):
-                           #pobiera cechy z DB i tworzy nowa gre tutaj
-                           print(net.askForPlayerData(nick))
-                           zaladuj_postac = True
-                           Otworz_gre = True
-                           sdax = 1
+                        playerData = next((x for x in player_list if x['name'] == nick), None)
 
-                        #funkcja do sprawdzenia czy ten 'nick' jest w DB
-                        else:
-                            tworz_postac = True
+                        if player_list == None:
+
                             print('wchodzi do pentli i ')
                             print(nick)
                             create_champ(nick)
                             done = True
+                        else:
+                            print(playerData)
 
 
 
@@ -106,7 +102,7 @@ def main_menu():
         pg.display.flip()
 
 
-        clock.tick(30)
+        # clock.tick(30)
 
 
 

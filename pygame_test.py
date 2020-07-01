@@ -333,7 +333,7 @@ class Game:
 
     def show_start_menu(self):
         # Show starting menu
-        main_menu(self.server.getOtherPlayers())
+        main_menu(self.server.getAllPlayers())
         return get_hero()
 
     def show_pause_menu(self):
