@@ -45,10 +45,9 @@ class Game:
                 self.activeNPC.append(self.character)
 
     def new(self):
-        self.show_start_menu()
+        self.PLAYER = self.show_start_menu()
         # Create objects
         #self.PLAYER = worrior.Worrior(name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10)
-        #def __init__(self, name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10):
         self.server.putPlayer(self.PLAYER)
         print("My name is... " + str(self.PLAYER.name))
         self.NPC = npc.importNpc(self)
@@ -87,7 +86,7 @@ class Game:
             print(self.PLAYER.map)
             print(otherPlayer['map'])
             if otherPlayer['map'] == self.PLAYER.map:
-                self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['posX']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['posY']-(self.GRID.vertical_move*TILESIZE) ))
+                self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['position_x']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['position_y']-(self.GRID.vertical_move*TILESIZE) ))
 
         for character in self.activeNPC:
             if character.map == self.GRID.name:
@@ -320,11 +319,7 @@ class Game:
     def show_start_menu(self):
         # Show starting menu
         main_menu()
-        #print(f'ataka')
-        #print(main_menu().hero.attack())
-        self.PLAYER = main_menu().get_hero()
-        #self.PLAYER = her0.Worrior(name='xyz', sprite='./BULBA64.png', position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10)
-        #pass
+        return get_hero()
 
     def show_pause_menu(self):
         # Pause game and show some menu

@@ -24,6 +24,7 @@ pg.display.set_caption('Main Menu')
 clock = pg.time.Clock()
 pg.init()
 click = False
+done = False
 hero = Worrior()
 
 def main_menu():
@@ -43,13 +44,9 @@ def main_menu():
     nick = ''
     # hero = Worrior()
 
-    def get_hero():
-        return hero
-
 
 
     while not done:
-
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 done = True
@@ -83,6 +80,7 @@ def main_menu():
                             print('wchodzi do pentli i ')
                             print(nick)
                             create_champ(nick)
+                            done = True
 
 
 
@@ -109,6 +107,7 @@ def main_menu():
 
 
         clock.tick(30)
+
 
 
 def create_champ(nick):
@@ -212,12 +211,14 @@ def create_champ(nick):
 
 
         if button_submit.collidepoint((mx, my)):
-            global hero
+            global hero, done
             if click:
                 if available_points == 0:
                     action += 5
-                    hero = Worrior(nick, './BULBA64.png', 0, 0, health, strength, armor, action)
-
+                    print("zmieniam hirka")
+                    hero = Worrior(name=nick, sprite='./BULBA64.png', position_x = 0, position_y = 0, hp = health, ad = strength, arm = armor, pa = action)
+                    done = True
+                    running = False
                     return hero
 
                     # pygame.quit()
@@ -282,6 +283,9 @@ def create_champ(nick):
         pygame.display.update()
         clock.tick(60)
 
+def get_hero():
+    global hero
+    return hero
 
 # if __name__ == '__main__':
 #     pg.init()

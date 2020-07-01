@@ -26,8 +26,8 @@ class Battle2:
             for column in range(5):
                 self.window.blit(TEXTURES[self.GRID.data[row + self.GRID.vertical_move][column + self.GRID.horizontal_move]],(column * TILESIZE, row * TILESIZE))
 
-        self.window.blit(hero.sprite, (hero.position_x, hero.position_y))
-        self.window.blit(enemy.sprite, (enemy.position_x, enemy.position_y))
+        self.window.blit(pygame.image.load(hero.sprite), (hero.position_x, hero.position_y))
+        self.window.blit(pygame.image.load(enemy.sprite), (enemy.position_x, enemy.position_y))
 
         enemy_hp = font2.render(f'HP: {enemy.hp}', True, green)
         enemy_hpRect = enemy_hp.get_rect()
