@@ -10,7 +10,7 @@ class Worrior():
         self.ad = ad
         self.arm = arm
         self.pa = pa
-        self.sprite = pygame.image.load(sprite)
+        self.sprite = sprite
         self.position_x = position_x
         self.position_y = position_y
         self.prev_pos = []

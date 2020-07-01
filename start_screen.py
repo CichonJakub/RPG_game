@@ -1,6 +1,10 @@
 import pygame as pg
 from settings import *
 import net
+from worrior import *
+
+
+
 
 def make_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
@@ -20,7 +24,7 @@ pg.display.set_caption('Main Menu')
 clock = pg.time.Clock()
 pg.init()
 click = False
-
+hero = Worrior()
 
 def main_menu():
     # screen = pg.display.set_mode((1280, 720))
@@ -37,6 +41,12 @@ def main_menu():
     text = ''
     done = False
     nick = ''
+    # hero = Worrior()
+
+    def get_hero():
+        return hero
+
+
 
     while not done:
 
@@ -75,6 +85,7 @@ def main_menu():
                             create_champ(nick)
 
 
+
                     elif event.key == pg.K_BACKSPACE:
                         text = text[:-1]
                     else:
@@ -105,11 +116,10 @@ def create_champ(nick):
     running = True
     available_points = 20
     strength = 0
-    agility = 0
-    intelligence = 0
-    endurance = 0
-    luck = 0
-    charisma = 0
+    health = 0
+    armor = 0
+    action = 0
+
 
     # strength, agility, intelligence, endurance, luck, charisma = 0
 
@@ -139,95 +149,58 @@ def create_champ(nick):
                     strength -= 1
                     available_points += 1
 
-        #agility-----------------------
-        button_agility_add = pygame.Rect(350, 200, 76, 76)
-        button_agility_reduce = pygame.Rect(450, 200, 76, 76)
+        #health-----------------------
+        button_health_add = pygame.Rect(350, 200, 76, 76)
+        button_health_reduce = pygame.Rect(450, 200, 76, 76)
 
-        make_text(f'Agility points: {agility}', font, black, screen, 20, 225)
+        make_text(f'Health points: {health}', font, black, screen, 20, 225)
 
-        if button_agility_add.collidepoint((mx, my)):
+        if button_health_add.collidepoint((mx, my)):
             if click:
                 if available_points > 0:
                     available_points -= 1
-                    agility += 1
+                    health += 1
 
-        if button_agility_reduce.collidepoint((mx, my)):
+        if button_health_reduce.collidepoint((mx, my)):
             if click:
-                if agility > 0:
-                    agility -= 1
+                if health > 0:
+                    health -= 1
                     available_points += 1
 
-        #intelligence ----------------------
-        button_intelligence_add = pygame.Rect(350, 300, 76, 76)
-        button_intelligence_reduce = pygame.Rect(450, 300, 76, 76)
+        #armor ----------------------
+        button_armor_add = pygame.Rect(350, 300, 76, 76)
+        button_armor_reduce = pygame.Rect(450, 300, 76, 76)
 
-        make_text(f'Intelligence points: {intelligence}', font, black, screen, 20, 325)
+        make_text(f'Armor points: {armor}', font, black, screen, 20, 325)
 
-        if button_intelligence_add.collidepoint((mx, my)):
+        if button_armor_add.collidepoint((mx, my)):
             if click:
                 if available_points > 0:
                     available_points -= 1
-                    intelligence += 1
+                    armor += 1
 
-        if button_intelligence_reduce.collidepoint((mx, my)):
+        if button_armor_reduce.collidepoint((mx, my)):
             if click:
-                if intelligence > 0:
-                    intelligence -= 1
+                if armor > 0:
+                    armor -= 1
                     available_points += 1
 
-        #endurance ----------------------
-        button_endurance_add = pygame.Rect(350, 400, 76, 76)
-        button_endurance_reduce = pygame.Rect(450, 400, 76, 76)
+        #action ----------------------
+        button_action_add = pygame.Rect(350, 400, 76, 76)
+        button_action_reduce = pygame.Rect(450, 400, 76, 76)
 
-        make_text(f'Endurance points: {endurance}', font, black, screen, 20, 425)
+        make_text(f'Action points: {action}', font, black, screen, 20, 425)
 
-        if button_endurance_add.collidepoint((mx, my)):
+        if button_action_add.collidepoint((mx, my)):
             if click:
                 if available_points > 0:
                     available_points -= 1
-                    endurance += 1
+                    action += 1
 
-        if button_endurance_reduce.collidepoint((mx, my)):
+        if button_action_reduce.collidepoint((mx, my)):
             if click:
-                if endurance > 0:
-                    endurance -= 1
-                    available_points += 1
-
-
-        #luck ----------------------
-        button_luck_add = pygame.Rect(350, 500, 76, 76)
-        button_luck_reduce = pygame.Rect(450, 500, 76, 76)
-
-        make_text(f'Luck points: {luck}', font, black, screen, 20, 525)
-
-        if button_luck_add.collidepoint((mx, my)):
-            if click:
-                if available_points > 0:
-                    available_points -= 1
-                    luck += 1
-
-        if button_luck_reduce.collidepoint((mx, my)):
-            if click:
-                if luck > 0:
-                    luck -= 1
-                    available_points += 1
-
-        #charisma ----------------------
-        button_charisma_add = pygame.Rect(350, 600, 76, 76)
-        button_charisma_reduce = pygame.Rect(450, 600, 76, 76)
-
-        make_text(f'Charisma points: {charisma}', font, black, screen, 20, 625)
-
-        if button_charisma_add.collidepoint((mx, my)):
-            if click:
-                if available_points > 0:
-                    available_points -= 1
-                    charisma += 1
-
-        if button_charisma_reduce.collidepoint((mx, my)):
-            if click:
-                if charisma > 0:
-                    charisma -= 1
+                if action > 0:
+                    action -= 1
                     available_points += 1
 
 
@@ -239,13 +212,24 @@ def create_champ(nick):
 
 
         if button_submit.collidepoint((mx, my)):
+            global hero
             if click:
                 if available_points == 0:
-                    note = open('postacie.txt', 'a')
-                    note.write(f'nick:{nick};strength:{strength};agility:{agility};intelligence:{intelligence};endurance:{endurance};luck:{luck};charisma:{charisma}\n')
-                    note.close()
+                    action += 5
+                    hero = Worrior(nick, './BULBA64.png', 0, 0, health, strength, armor, action)
+
+                    return hero
+
+                    # pygame.quit()
+                    # sys.exit()
+                    # #pass
+                    # note = open('postacie.txt', 'a')
+            #                     # note.write(f'nick:{nick};strength:{strength};agility:{agility};intelligence:{intelligence};endurance:{endurance};luck:{luck};charisma:{charisma}\n')
+            #                     # note.close()
                     #mp = Character(sxdasdasdasd)
                     # dodac do tablicy
+
+
 
                     #TO DO:
                     #stworzyck klase worrior i np dodac do tabliczy gracze
@@ -259,30 +243,22 @@ def create_champ(nick):
         screen.blit(plus2, button_strength_add)
         screen.blit(minus2, button_strength_reduce)
 
-        pygame.draw.rect(screen, lightskyblue3, button_agility_add)
-        pygame.draw.rect(screen, lightskyblue3, button_agility_reduce)
-        screen.blit(plus2, button_agility_add)
-        screen.blit(minus2, button_agility_reduce)
+        pygame.draw.rect(screen, lightskyblue3, button_health_add)
+        pygame.draw.rect(screen, lightskyblue3, button_health_reduce)
+        screen.blit(plus2, button_health_add)
+        screen.blit(minus2, button_health_reduce)
 
-        pygame.draw.rect(screen, lightskyblue3, button_intelligence_add)
-        pygame.draw.rect(screen, lightskyblue3, button_intelligence_reduce)
-        screen.blit(plus2, button_intelligence_add)
-        screen.blit(minus2, button_intelligence_reduce)
+        pygame.draw.rect(screen, lightskyblue3, button_armor_add)
+        pygame.draw.rect(screen, lightskyblue3, button_armor_reduce)
+        screen.blit(plus2, button_armor_add)
+        screen.blit(minus2, button_armor_reduce)
 
-        pygame.draw.rect(screen, lightskyblue3, button_endurance_add)
-        pygame.draw.rect(screen, lightskyblue3, button_endurance_reduce)
-        screen.blit(plus2, button_endurance_add)
-        screen.blit(minus2, button_endurance_reduce)
+        pygame.draw.rect(screen, lightskyblue3, button_action_add)
+        pygame.draw.rect(screen, lightskyblue3, button_action_reduce)
+        screen.blit(plus2, button_action_add)
+        screen.blit(minus2, button_action_reduce)
 
-        pygame.draw.rect(screen, lightskyblue3, button_luck_add)
-        pygame.draw.rect(screen, lightskyblue3, button_luck_reduce)
-        screen.blit(plus2, button_luck_add)
-        screen.blit(minus2, button_luck_reduce)
 
-        pygame.draw.rect(screen, lightskyblue3, button_charisma_add)
-        pygame.draw.rect(screen, lightskyblue3, button_charisma_reduce)
-        screen.blit(plus2, button_charisma_add)
-        screen.blit(minus2, button_charisma_reduce)
 
         pygame.draw.rect(screen, darkgray, button_submit)
         screen.blit(start3, button_submit)
@@ -312,4 +288,4 @@ def create_champ(nick):
 #     main()
 #     pg.quit()
 
-main_menu()
+# main_menu()

@@ -20,7 +20,7 @@ class NPC:
         self.map = "maps/" + cellsArray[1] + ".txt"
         self.position_x = int(cellsArray[2])
         self.position_y = int(cellsArray[3])
-        self.sprite = pygame.image.load("./textures/characters/" + cellsArray[4])
+        self.sprite = "./textures/characters/" + cellsArray[4]
         self.dialogues = []
         self.name = cellsArray[5]
         self.hp = cellsArray[6]
