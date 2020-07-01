@@ -44,6 +44,7 @@ class Net:
 
     @sio.on('allPlayersTable')
     def on_message(data):
+        global allPlayers
         print("ALL PLAYERS:")
         print(data)
         print(len(json.loads(data)))

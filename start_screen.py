@@ -27,7 +27,7 @@ click = False
 done = False
 hero = Worrior()
 
-def main_menu(self, player_list):
+def main_menu(player_list):
     # screen = pg.display.set_mode((1280, 720))
     # font = pg.font.Font(None, 32)
     # font2 = pg.font.Font(None, 64)
@@ -44,9 +44,10 @@ def main_menu(self, player_list):
     nick = ''
     # hero = Worrior()
 
-
+    print(f'player list: {player_list}')
 
     while not done:
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 done = True
@@ -69,7 +70,10 @@ def main_menu(self, player_list):
                         print(net.is_in_DB(nick))
                         playerData = next((x for x in player_list if x['name'] == nick), None)
 
-                        if player_list == None:
+                        #print('player data')
+                        #print(playerData['arm'])
+
+                        if playerData == None:
 
                             print('wchodzi do pentli i ')
                             print(nick)
@@ -77,6 +81,15 @@ def main_menu(self, player_list):
                             done = True
                         else:
                             print(playerData)
+                            global hero
+                            hero = Worrior(ad=playerData['ad'], arm=playerData['arm'], curr_quests=playerData['curr_quests'], dir=playerData['dir'], exp=playerData['exp'], gold=playerData['gold'], hp=playerData['hp'], map=playerData['map'], moving=playerData['moving'], name=playerData['name'], pa=playerData['pa'], position_x=playerData['position_x'], position_y=playerData['position_y'], prev_map=playerData['prev_map'], prev_pos=playerData['prev_pos'], quests_completed=playerData['quests_completed'], sprite=playerData['sprite'], velocity=playerData['velocity'])
+                            return hero
+
+                            #hero = Worrior(name=nick, sprite='./BULBA64.png', position_x=0, position_y=0, hp=health, ad=strength, arm=armor, pa=action)
+                            #
+                            # done = True
+                            # running = False
+                            # return hero
 
 
 
@@ -213,6 +226,7 @@ def create_champ(nick):
                     action += 5
                     print("zmieniam hirka")
                     hero = Worrior(name=nick, sprite='./BULBA64.png', position_x = 0, position_y = 0, hp = health, ad = strength, arm = armor, pa = action)
+                    print(f'moje statystyki {hero.name} \n {hero.sprite}   \n {hero.hp}  \n {hero.arm}')
                     done = True
                     running = False
                     return hero

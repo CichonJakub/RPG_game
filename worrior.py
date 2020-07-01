@@ -25,6 +25,27 @@ class Worrior():
         self.quests_completed = []
 
 
+    def __init__(self, ad=0, arm=0, curr_quests={}, dir=False, exp=0, gold = 0, hp=0, map='maps/second_map.txt', moving=False, name='noname', pa=10, position_x=0, position_y=0, prev_map=[], prev_pos=[], quests_completed=[], sprite='', velocity=16):
+        self.ad = ad
+        self.arm = arm
+        self.curr_quests = curr_quests
+        self.dir = dir
+        self.exp = exp
+        self.gold = gold
+        self.hp = hp
+        self.map = map
+        self.moving = moving
+        self.name = name
+        self.pa = pa
+        self.position_x = position_x
+        self.position_y = position_y
+        self.prev_map = prev_map
+        self.prev_pos = prev_pos
+        self.quests_completed = quests_completed
+        self.sprite = sprite
+        self.velocity = velocity
+
+
     def attack(self):
         return random.randint(0, self.ad)
 
