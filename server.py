@@ -82,6 +82,7 @@ def on_message(sid, data):
     #print(sid + " " + data_dict['name'] + " " + data_dict['map'])
     existingPlayer = next((x for x in players if x['name'] == data_dict['name']), None)
     if existingPlayer == None:
+        print("APPENDING PLAYER")
         players.append(player)
     activePlayers.append(player)
     #print("PLAYERS: ")
@@ -96,16 +97,18 @@ def on_message(sid, data):
 
 @sio.on('sendMove')
 def on_message(sid, data):
-    #print("PLAYER MOVING")
+    print("PLAYER MOVING")
+    print(data)
     data_dict = json.loads(data)
-    modifiedPlayer = next((x for x in players if x.name == data_dict['name']), None)
+    print(data_dict)
+    modifiedPlayer = next((x for x in players if x['name'] == data_dict['name']), None)
     if modifiedPlayer != None:
         modifiedPlayer = data_dict
-    modified = next((x for x in activePlayers if x.name == data_dict['name']), None)
+    modified = next((x for x in activePlayers if x['name'] == data_dict['name']), None)
     if modified != None:
-        modified.position_x = data_dict['position_x']
-        modified.position_y = data_dict['position_y']
-        modified.map = data_dict['map']
+        modified['position_x'] = data_dict['position_x']
+        modified['position_y'] = data_dict['position_y']
+        modified['map'] = data_dict['map']
         #print("PLAYER MOVEMENT UPDATED " + str(modified.position[0]) + " " + str(modified.position[1]))
         sio.emit('updateOtherPlayers', data, skip_sid=sid)
         savePlayersBase()

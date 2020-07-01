@@ -1,4 +1,44 @@
 {
     "players": [
+        {
+            "ad": 9,
+            "arm": 3,
+            "curr_quests": {},
+            "dir": false,
+            "exp": 0,
+            "gold": 100,
+            "hp": 3,
+            "map": "maps/second_map.txt",
+            "moving": false,
+            "name": "test",
+            "pa": 10,
+            "position_x": 96,
+            "position_y": 48,
+            "prev_map": [],
+            "prev_pos": [],
+            "quests_completed": [],
+            "sprite": "./BULBA64.png",
+            "velocity": 16
+        },
+        {
+            "ad": 5,
+            "arm": 7,
+            "curr_quests": {},
+            "dir": false,
+            "exp": 0,
+            "gold": 100,
+            "hp": 6,
+            "map": "maps/second_map.txt",
+            "moving": false,
+            "name": "test2",
+            "pa": 7,
+            "position_x": 128,
+            "position_y": 64,
+            "prev_map": [],
+            "prev_pos": [],
+            "quests_completed": [],
+            "sprite": "./BULBA64.png",
+            "velocity": 16
+        }
     ]
 }
