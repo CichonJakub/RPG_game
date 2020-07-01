@@ -1,12 +1,18 @@
 {
     "players": [
         {
+<<<<<<< HEAD
             "ad": 20,
             "arm": 0,
+=======
+            "ad": 5,
+            "arm": 5,
+>>>>>>> 1f963ffd64758fb0d69bc978babc5752e579f045
             "curr_quests": {},
             "dir": false,
             "exp": 0,
             "gold": 100,
+<<<<<<< HEAD
             "hp": 0,
             "map": "maps/second_map.txt",
             "moving": false,
@@ -14,6 +20,15 @@
             "pa": 5,
             "position_x": 80,
             "position_y": 128,
+=======
+            "hp": 5,
+            "map": "maps/second_map.txt",
+            "moving": false,
+            "name": "test",
+            "pa": 10,
+            "position_x": 32,
+            "position_y": 64,
+>>>>>>> 1f963ffd64758fb0d69bc978babc5752e579f045
             "prev_map": [],
             "prev_pos": [],
             "quests_completed": [],
@@ -22,18 +37,29 @@
         },
         {
             "ad": 5,
+<<<<<<< HEAD
             "arm": 4,
+=======
+            "arm": 3,
+>>>>>>> 1f963ffd64758fb0d69bc978babc5752e579f045
             "curr_quests": {},
             "dir": false,
             "exp": 0,
             "gold": 100,
-            "hp": 6,
+            "hp": 5,
             "map": "maps/second_map.txt",
             "moving": false,
+<<<<<<< HEAD
             "name": "poks",
             "pa": 10,
             "position_x": 0,
             "position_y": 0,
+=======
+            "name": "test2",
+            "pa": 12,
+            "position_x": 160,
+            "position_y": 96,
+>>>>>>> 1f963ffd64758fb0d69bc978babc5752e579f045
             "prev_map": [],
             "prev_pos": [],
             "quests_completed": [],

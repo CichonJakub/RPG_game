@@ -31,9 +31,9 @@ activePlayers = []
 def loadPlayersBase():
     with open("playersBase.json") as jsonFile:
         jsonObject = json.load(jsonFile)
-        print(len(jsonObject))
+        print(len(jsonObject['players']))
         #print(jsonObject[0]['name'])
-        players = jsonObject
+        players = jsonObject['players']
         print(players)
         jsonFile.close()
         return players
