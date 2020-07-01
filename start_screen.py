@@ -292,4 +292,8 @@ def get_hero():
 #     main()
 #     pg.quit()
 
+<<<<<<< Updated upstream
 # main_menu()
+=======
+#main_menu()
+>>>>>>> Stashed changes

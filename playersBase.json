@@ -1,4 +1,14 @@
 {
     "players": [
+<<<<<<< Updated upstream
+=======
+        {
+            "map": "maps/second_map.txt",
+            "name": "xyz",
+            "posX": 0,
+            "posY": 0,
+            "sprite": "./BULBA64alt.png"
+        }
+>>>>>>> Stashed changes
     ]
 }
