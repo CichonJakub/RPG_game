@@ -101,6 +101,7 @@ class Game:
         # Events on the map
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.server.sendExitSignal(self.PLAYER)
                 self.quit()
 
         keys = pygame.key.get_pressed()
