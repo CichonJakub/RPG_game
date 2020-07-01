@@ -85,7 +85,7 @@ class Game:
         for otherPlayer in self.server.getOtherPlayers:
             print(self.PLAYER.map)
             print(otherPlayer['map'])
-            if otherPlayer['map'] == self.PLAYER.map:
+            if otherPlayer['map'] == self.PLAYER.map and otherPlayer['name'] != self.PLAYER.name:
                 self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['position_x']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['position_y']-(self.GRID.vertical_move*TILESIZE) ))
 
         for character in self.activeNPC:
@@ -300,7 +300,7 @@ class Game:
     def fight(self, dialogue, npcInteract):
         battle = battle2.Battle2()
 
-        # Trzeba podmienić jeszcze na odpowiednie ikony graczy i ich parametry z odpowiednim x i y a następnie przypisać zasoby po wygranej walce lub przegranej usuwać 
+        # Trzeba podmienić jeszcze na odpowiednie ikony graczy i ich parametry z odpowiednim x i y a następnie przypisać zasoby po wygranej walce lub przegranej usuwać
         hero = worrior.Worrior(self.PLAYER.name,'textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
         monster = worrior.Worrior('Blastoise','textures/characters/BLASTOISE.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
 
@@ -332,7 +332,7 @@ class Game:
         # Show starting menu
         main_menu()
         return get_hero()
-            
+
     def show_pause_menu(self):
         # Pause game and show some menu
         pass
