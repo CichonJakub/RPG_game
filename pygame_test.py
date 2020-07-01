@@ -141,9 +141,21 @@ class Game:
             if keys[pygame.K_f] and npcInteract.isCollision(player_X, player_Y):
                 print("COLLISION!!!")
                 for dialogue in npcInteract.dialogues:
-                    # check for enabling new dialogues depanding on a quest
-                    if (dialogue.questId, dialogue.stage) in self.PLAYER.curr_quests.items():
-                           if dialogue.npc == npcInteract.npc_id:
+                    print(self.PLAYER.curr_quests)
+
+                    if dialogue.questId in self.PLAYER.quests_completed:
+                        print("COMPLETED")
+                        dialogue.currentStage = "False"
+
+                    if dialogue.questId in self.PLAYER.curr_quests.keys():
+                        if dialogue.npc == npcInteract.npc_id:
+                            if dialogue.stage < self.PLAYER.curr_quests[dialogue.questId]:
+                                dialogue.currentStage = "False"
+                                print(dialogue.text)
+                            if dialogue.stage == self.PLAYER.curr_quests[dialogue.questId]:
+                                dialogue.currentStage = "True"
+                                print(dialogue.text)
+                            if dialogue.stage == self.PLAYER.curr_quests[dialogue.questId] - 0.5:
                                 dialogue.currentStage = "True"
                                 print(dialogue.text)
 
@@ -242,7 +254,6 @@ class Game:
                     self.dialogue_choice = 2
                     tmpDialogue = dialogue.next[0].next[0]
                     if tmpDialogue.delDial == 'True':
-                        print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROZNYYYYYYYYYYYYYYYYYYYYYY")
                         self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
                         print("Current quests: ")
                         print(self.PLAYER.curr_quests)
@@ -255,9 +266,6 @@ class Game:
                     return
                 elif event.type == KEYDOWN and event.key == K_3 and dialogue.option >= 3:
                     # Fight init
-                    # Sprawdzenie czy dialog na ktory wskazuje nastepna opcja to fight jeśli tak to inincjujemy walkę
-                    # Przyznawanie jakiś nagród za pokonanie przeciwnika ??? Jak na razie walka tylko przykładowa i powrót do gry po wygranej walce
-                    # Pytanie jak rozpatrujemy przegraną walkę ? Wyświetlenie Game Over i usunięcie z DB ?
                     self.dialogue_choice = 3
                     self.fight(dialogue, npcInteract)
                     self.updateMap()
@@ -292,6 +300,7 @@ class Game:
     def fight(self, dialogue, npcInteract):
         battle = battle2.Battle2()
 
+        # Trzeba podmienić jeszcze na odpowiednie ikony graczy i ich parametry z odpowiednim x i y a następnie przypisać zasoby po wygranej walce lub przegranej usuwać 
         hero = worrior.Worrior(self.PLAYER.name,'textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
         monster = worrior.Worrior('Blastoise','textures/characters/BLASTOISE.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
 
@@ -313,14 +322,17 @@ class Game:
                 pass
             self.activeNPC.remove(npcInteract)
             self.NPC.remove(npcInteract)
+        else:
+            game_over()
 
-
+    def game_over(self):
+        pass
 
     def show_start_menu(self):
         # Show starting menu
         main_menu()
         return get_hero()
-
+            
     def show_pause_menu(self):
         # Pause game and show some menu
         pass
