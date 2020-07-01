@@ -212,12 +212,16 @@ class Game:
 
 
         #updates
+        self.PLAYER.position_x = x + self.GRID.horizontal_move*TILESIZE
+        self.PLAYER.position_y = y + self.GRID.vertical_move*TILESIZE
+        #self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, (self.PLAYER.POS[0]+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.POS[1]+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
+        self.server.sendMove(self.PLAYER)
+        self.window.fill((0,0,0))
         self.PLAYER.position_x = x
         self.PLAYER.position_y = y
-        self.window.fill((0,0,0))
-        self.server.sendMove(self.PLAYER)
         self.updateMap()
         self.checkQuests()
+        
 
     def displayDialogue(self, message):
         new_message = ""
@@ -300,9 +304,8 @@ class Game:
     def fight(self, dialogue, npcInteract):
         battle = battle2.Battle2()
 
-        # Trzeba podmienić jeszcze na odpowiednie ikony graczy i ich parametry z odpowiednim x i y a następnie przypisać zasoby po wygranej walce lub przegranej usuwać
-        hero = worrior.Worrior(self.PLAYER.name,'textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
-        monster = worrior.Worrior('Blastoise','textures/characters/BLASTOISE.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
+        hero = worrior.Worrior(name = self.PLAYER.name, sprite = self.PLAYER.sprite, position_x = 120, position_y = 250, hp = self.PLAYER.hp, ad = self.PLAYER.ad, arm = self.PLAYER.arm, pa = self.PLAYER.pa)
+        monster = worrior.Worrior(name = npcInteract.name, sprite = npcInteract.sprite, position_x = 120, position_y = 10, hp = npcInteract.hp, ad = npcInteract.ad, arm = npcInteract.arm)
 
         battle.new(hero, monster)
         self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
@@ -323,7 +326,7 @@ class Game:
             self.activeNPC.remove(npcInteract)
             self.NPC.remove(npcInteract)
         else:
-            game_over()
+            self.game_over()
 
     def game_over(self):
         pass
