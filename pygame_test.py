@@ -12,6 +12,8 @@ import locations
 import quests
 import npc
 import net
+import battle2
+import random
 
 
 class Game:
@@ -87,7 +89,7 @@ class Game:
 
         for character in self.activeNPC:
             if character.map == self.GRID.name:
-                self.window.blit(character.sprite,(character.position[0]-(self.GRID.horizontal_move*TILESIZE), character.position[1]-(self.GRID.vertical_move*TILESIZE) ))
+                self.window.blit(character.sprite,(character.position_x-(self.GRID.horizontal_move*TILESIZE), character.position_y-(self.GRID.vertical_move*TILESIZE) ))
 
         self.window.blit(self.PLAYER.sprite, (self.PLAYER.position_x, self.PLAYER.position_y) )
         
@@ -221,28 +223,42 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == KEYDOWN and event.key == K_1 and dialogue.option >= 1:
-                    self.dialogue_choice = 1
-                    self.updateMap()
-                    self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
-                    print("Current quests: ")
-                    print(self.PLAYER.curr_quests)
-                    npcInteract.dialogues.remove(self.dialogue_root)
-                    npcInteract.dialogues[0].currentStage = "True"
-                    return
+                    if dialogue.next[0].text == '':
+                        pass
+                    else:
+                        self.dialogue_choice = 1
+                        self.updateMap()
+                        self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
+                        print("Current quests: ")
+                        print(self.PLAYER.curr_quests)
+                        npcInteract.dialogues.remove(self.dialogue_root)
+                        try:
+                            npcInteract.dialogues[0].currentStage = "True"
+                        except:
+                            pass
+                        return
                 elif event.type == KEYDOWN and event.key == K_2 and dialogue.option >= 2:
                     self.dialogue_choice = 2
                     tmpDialogue = dialogue.next[0].next[0]
-                    if tmpDialogue.questId != 0:
+                    if tmpDialogue.delDial == 'True':
                         print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROZNYYYYYYYYYYYYYYYYYYYYYY")
                         self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
                         print("Current quests: ")
                         print(self.PLAYER.curr_quests)
                         npcInteract.dialogues.remove(self.dialogue_root)
-                        npcInteract.dialogues[0].currentStage = "True"
+                        try:
+                            npcInteract.dialogues[0].currentStage = "True"
+                        except:
+                            pass
                     self.updateMap()
                     return
                 elif event.type == KEYDOWN and event.key == K_3 and dialogue.option >= 3:
+                    # Fight init
+                    # Sprawdzenie czy dialog na ktory wskazuje nastepna opcja to fight jeśli tak to inincjujemy walkę 
+                    # Przyznawanie jakiś nagród za pokonanie przeciwnika ??? Jak na razie walka tylko przykładowa i powrót do gry po wygranej walce
+                    # Pytanie jak rozpatrujemy przegraną walkę ? Wyświetlenie Game Over i usunięcie z DB ?
                     self.dialogue_choice = 3
+                    self.fight(dialogue, npcInteract)
                     self.updateMap()
                     return
 
@@ -271,6 +287,33 @@ class Game:
             print(self.PLAYER.curr_quests)
             print(self.PLAYER.exp)
             print(self.PLAYER.gold)
+
+    def fight(self, dialogue, npcInteract):
+        battle = battle2.Battle2()
+
+        hero = worrior.Worrior(self.PLAYER.name,'textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
+        monster = worrior.Worrior('Blastoise','textures/characters/BLASTOISE.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
+
+        battle.new(hero, monster)
+        self.window = pygame.display.set_mode( (WIDTH, HEIGHT) )
+        pygame.display.set_caption(TITLE)
+
+        if hero.is_alive():
+            print("Hero won!!!!")
+            self.PLAYER.gold += 100
+            self.PLAYER.exp += 50
+            self.PLAYER.curr_quests[dialogue.questId] = dialogue.stage + 1.0
+            print("Current quests: ")
+            print(self.PLAYER.curr_quests)
+            npcInteract.dialogues.remove(self.dialogue_root)
+            try:
+                npcInteract.dialogues[0].currentStage = "True"
+            except:
+                pass
+            self.activeNPC.remove(npcInteract)
+            self.NPC.remove(npcInteract)
+
+            
 
     def show_start_menu(self):
         # Show starting menu

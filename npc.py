@@ -1,6 +1,7 @@
 import xlrd
 import json
 import pygame
+import random
 from settings import *
 from dialogues import *
 
@@ -17,7 +18,8 @@ class NPC:
     def __init__(self, cellsArray):
         self.npc_id = cellsArray[0]
         self.map = "maps/" + cellsArray[1] + ".txt"
-        self.position = [int(cellsArray[2]), int(cellsArray[3])]
+        self.position_x = int(cellsArray[2])
+        self.position_y = int(cellsArray[3])
         self.sprite = pygame.image.load("./textures/characters/" + cellsArray[4])
         self.dialogues = []
         self.name = cellsArray[5]
@@ -25,16 +27,36 @@ class NPC:
         self.ad = cellsArray[7]
         self.arm = cellsArray[8]
         # Collision coordinates
-        self.npc_left_dialogue = self.position[0] - 0.5*TILESIZE
-        self.npc_right_dialogue = self.position[0] + 0.5*TILESIZE
-        self.npc_top_dialogue = self.position[1] - 0.5*TILESIZE
-        self.npc_bottom_dialogue = self.position[1] + 0.5*TILESIZE
+        self.npc_left_dialogue = self.position_x - 0.5*TILESIZE
+        self.npc_right_dialogue = self.position_x + 0.5*TILESIZE
+        self.npc_top_dialogue = self.position_y - 0.5*TILESIZE
+        self.npc_bottom_dialogue = self.position_y + 0.5*TILESIZE
 
     def isCollision(self, player_X, player_Y):
         print("Just checkin' collision with NPC")
         if player_X >= self.npc_left_dialogue and player_X <= self.npc_right_dialogue and player_Y >= self.npc_top_dialogue and player_Y <= self.npc_bottom_dialogue:
             return True
         return False
+
+    def attack(self):
+        return random.randint(0, self.ad)
+
+    def defence(self):
+        return random.randint(0, self.arm)
+
+    def lost_hp(self, amount):
+        self.hp -= amount
+        if self.hp <= 0:
+            print(f"{self.name} has been slain")
+
+    def is_alive(self):
+        if self.hp <= 0:
+            return False
+        else:
+            return True
+
+    def __str__(self):
+        return self.name
 
 def importNpc(self):
     npcArray = []

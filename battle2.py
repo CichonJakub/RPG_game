@@ -201,9 +201,9 @@ class Battle2:
 
 
 
-hero1 = Worrior('Mime','textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
-monster1 = Worrior('Snorlax','textures/characters/SNORLAX.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
+#hero1 = Worrior('Mime','textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
+#monster1 = Worrior('Snorlax','textures/characters/SNORLAX.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
 
 
-battle = Battle2()
-battle.new(hero1, monster1)
+#battle = Battle2()
+#battle.new(hero1, monster1)

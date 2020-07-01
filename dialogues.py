@@ -25,6 +25,7 @@ class DLine:
         self.reward = cellsArray[8]
         self.currentStage = cellsArray[9]
         self.choice = int(cellsArray[10])
+        self.delDial = cellsArray[11]
         self.avaliableDialogues = []   
         self.next = []
 
