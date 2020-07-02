@@ -29,7 +29,6 @@ class Game:
 
     def load_map(self):
         self.GRID = Map(self.PLAYER.map)
-        #self.GRID = Map(MAP)
         self.PREV_GRID = []
 
     def obj_on_curr_map(self):
@@ -47,7 +46,6 @@ class Game:
     def new(self):
         self.PLAYER = self.show_start_menu()
         # Create objects
-        #self.PLAYER = worrior.Worrior(name='xyz', sprite='./BULBA64.png',position_x=0, position_y=0, hp=100, ad=0, arm=0, pa=10)
         self.server.putPlayer(self.PLAYER)
         print("My name is... " + str(self.PLAYER.name))
         self.NPC = npc.importNpc(self)
@@ -78,13 +76,11 @@ class Game:
             if location.map == self.GRID.name:
                 self.window.blit(location.sprite,(location.position[0]-(self.GRID.horizontal_move*TILESIZE), location.position[1]-(self.GRID.vertical_move*TILESIZE) ))
 
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        # print obecnej tablicy innych graczy
-        print(self.server.getOtherPlayers)
+        #print(self.server.getOtherPlayers)
 
         for otherPlayer in self.server.getOtherPlayers:
-            print(self.PLAYER.map)
-            print(otherPlayer['map'])
+            #print(self.PLAYER.map)
+            #print(otherPlayer['map'])
             if otherPlayer['map'] == self.PLAYER.map and otherPlayer['name'] != self.PLAYER.name:
                 self.window.blit(pygame.image.load(otherPlayer['sprite']),(otherPlayer['position_x']-(self.GRID.horizontal_move*TILESIZE), otherPlayer['position_y']-(self.GRID.vertical_move*TILESIZE) ))
 
@@ -190,7 +186,6 @@ class Game:
         for locInteract in self.activeLoc:
             if locInteract.checkInteraction(player_X, player_Y):
                 self.PLAYER.prev_pos.append([x, y])
-                #self.PREV_GRID.append(self.GRID)
                 self.PLAYER.prev_map.append(self.GRID.name)
                 self.GRID = Map(locInteract.next_map)
                 self.PLAYER.map = self.GRID.name
@@ -204,10 +199,8 @@ class Game:
             x = self.PLAYER.prev_pos[-1][0]
             y = self.PLAYER.prev_pos[-1][1] + TILESIZE
             self.PLAYER.prev_pos.pop()
-            #self.GRID = self.PREV_GRID[-1]
             self.GRID = Map(self.PLAYER.prev_map[-1])
             self.PLAYER.map = self.GRID.name
-            #self.PREV_GRID.pop()
             self.PLAYER.prev_map.pop()
             self.obj_on_curr_map()
 
@@ -215,7 +208,6 @@ class Game:
         #updates
         self.PLAYER.position_x = x + self.GRID.horizontal_move*TILESIZE
         self.PLAYER.position_y = y + self.GRID.vertical_move*TILESIZE
-        #self.server.sendMove(self.PLAYER.NAME, self.PLAYER.MAP, (self.PLAYER.POS[0]+self.GRID.horizontal_move*TILESIZE), (self.PLAYER.POS[1]+self.GRID.vertical_move*TILESIZE), './BULBA64alt.png')
         self.server.sendMove(self.PLAYER)
         self.window.fill((0,0,0))
         self.PLAYER.position_x = x
@@ -330,11 +322,11 @@ class Game:
             self.game_over()
 
     def game_over(self):
+        # Ekran końcowy
         pass
 
     def show_start_menu(self):
         # Show starting menu
-        #print(f'lista przed wywoalenim: {net.server.getAllPlayers}')
         main_menu(self.server.getAllPlayers)
         return get_hero()
 

@@ -5,6 +5,8 @@ import random
 #logging.basicConfig(level=logging.DEBUG)
 #logging.debug('This will get logged')
 
+# DRAFT, 99% never used in other classes
+
 class Player:
     def __init__(self):
         self.NAME = str(random.randint(1,65001))
