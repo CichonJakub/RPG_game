@@ -28,12 +28,7 @@ done = False
 hero = Worrior()
 
 def main_menu(player_list):
-    # screen = pg.display.set_mode((1280, 720))
-    # font = pg.font.Font(None, 32)
-    # font2 = pg.font.Font(None, 64)
-    #
-    # pg.display.set_caption('Main Menu')
-    # clock = pg.time.Clock()
+
     input_box = pg.Rect(520, 300, 140, 32)
     color_inactive = pg.Color('lightskyblue3')
     color_active = pg.Color('dodgerblue2')
@@ -42,7 +37,7 @@ def main_menu(player_list):
     text = ''
     done = False
     nick = ''
-    # hero = Worrior()
+
 
     print(f'player list: {player_list}')
 
@@ -52,14 +47,14 @@ def main_menu(player_list):
             if event.type == pg.QUIT:
                 done = True
             if event.type == pg.MOUSEBUTTONDOWN:
-                # If the user clicked on the input_box rect.
+
                 if input_box.collidepoint(event.pos):
-                    # Toggle the active variable.
+
                     active = not active
-                    #active = True
+
                 else:
                     active = False
-                # Change the current color of the input box.
+
                 color = color_active if active else color_inactive
             if event.type == pg.KEYDOWN:
                 if active:
@@ -70,8 +65,6 @@ def main_menu(player_list):
                         print(net.is_in_DB(nick))
                         playerData = next((x for x in player_list if x['name'] == nick), None)
 
-                        #print('player data')
-                        #print(playerData['arm'])
 
                         if playerData == None:
 
@@ -85,11 +78,6 @@ def main_menu(player_list):
                             hero = Worrior(ad=playerData['ad'], arm=playerData['arm'], curr_quests=playerData['curr_quests'], dir=playerData['dir'], exp=playerData['exp'], gold=playerData['gold'], hp=playerData['hp'], map=playerData['map'], moving=playerData['moving'], name=playerData['name'], pa=playerData['pa'], position_x=playerData['position_x'], position_y=playerData['position_y'], prev_map=playerData['prev_map'], prev_pos=playerData['prev_pos'], quests_completed=playerData['quests_completed'], sprite=playerData['sprite'], velocity=playerData['velocity'])
                             return hero
 
-                            #hero = Worrior(name=nick, sprite='./BULBA64.png', position_x=0, position_y=0, hp=health, ad=strength, arm=armor, pa=action)
-                            #
-                            # done = True
-                            # running = False
-                            # return hero
 
 
 
@@ -99,14 +87,14 @@ def main_menu(player_list):
                         text += event.unicode
 
         screen.fill((30, 30, 30))
-        # Render the current text.
+
         txt_surface = font.render(text, True, color)
-        # Resize the box if the text is too long.
+
         width = max(200, txt_surface.get_width()+10)
         input_box.w = width
-        # Blit the text.
+
         screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
-        # Blit the input_box rect.
+
         pg.draw.rect(screen, color, input_box, 2)
 
         make_text('Welcome in our game!', font2, color_inactive, screen, 375, 50)
@@ -115,7 +103,6 @@ def main_menu(player_list):
         pg.display.flip()
 
 
-        # clock.tick(30)
 
 
 
@@ -129,15 +116,14 @@ def create_champ(nick):
     action = 0
 
 
-    # strength, agility, intelligence, endurance, luck, charisma = 0
+
 
     while running:
         screen.fill(darkgray)
         make_text('Creating your champion', font, black, screen, 20, 20)
         mx, my = pygame.mouse.get_pos()
         make_text(f'Remainings available points: {available_points}', font, black, screen, 900, 20)
-        # screen.blit(minus2, (200, 100))
-        # screen.blit(plus2, (300, 100))
+
 
         #strength --------------------
         button_strength_add = pygame.Rect(350, 100, 76, 76)
@@ -215,7 +201,7 @@ def create_champ(nick):
 
         # submit
         button_submit = pygame.Rect(800, 270, 256, 256)
-        #make_text(f'Crate Champion', font, black, screen, 800, 400)
+
 
 
 
@@ -230,21 +216,6 @@ def create_champ(nick):
                     done = True
                     running = False
                     return hero
-
-                    # pygame.quit()
-                    # sys.exit()
-                    # #pass
-                    # note = open('postacie.txt', 'a')
-            #                     # note.write(f'nick:{nick};strength:{strength};agility:{agility};intelligence:{intelligence};endurance:{endurance};luck:{luck};charisma:{charisma}\n')
-            #                     # note.close()
-                    #mp = Character(sxdasdasdasd)
-                    # dodac do tablicy
-
-
-
-                    #TO DO:
-                    #stworzyck klase worrior i np dodac do tabliczy gracze
-                    #wczesniej zintegruj gracza i playera :)
 
 
 
@@ -297,9 +268,3 @@ def get_hero():
     global hero
     return hero
 
-# if __name__ == '__main__':
-#     pg.init()
-#     main()
-#     pg.quit()
-
-# main_menu()

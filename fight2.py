@@ -80,28 +80,6 @@ def duel2(x, y):
     print(f'{x} has attaced {y}')
     waiting = True
     while waiting:
-        # for event in pygame.event.get():
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_1:
-        #             dmg = x.attack() - y.defence()
-        #             if dmg < 0:
-        #                 dmg = 0
-        #             x.pa += 2
-        #             y.lost_hp(dmg)
-        #             print(f'{y} lost {dmg} health point(s)')
-        #             waiting = False
-        #
-        #         if event.key == pygame.K_2:
-        #             if x.pa >= 5:
-        #                 dmg = 2 * (x.attack() - y.defence())
-        #                 if dmg < 0:
-        #                     dmg = 0
-        #                 x.pa -= 5
-        #                 y.lost_hp(dmg)
-        #                 print(f'{y} lost {dmg} health point(s)')
-        #                 waiting = False
-        #             else:
-        #                 print(f"You don't have enough PA to do strong attack, now you have {x.pa} PA")
         attack = raw_input("choose attack type: ")
         print(attack)
         if attack == '1':

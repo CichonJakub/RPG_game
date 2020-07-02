@@ -58,40 +58,11 @@ class Battle2:
         self.play = True
         while self.play:
             pygame.time.delay(FPS)
-            # sleep(2)
-            # self.make_move(enemy, 50)
-            # self.update_map(hero, enemy)
-            # # self.make_text('atakuje!!', pygame.font.SysFont(None, 20), black, self.window, 10, 10)
-            # sleep(2)
-            # self.make_move(enemy, -50)
-            # self.update_map(enemy, hero)
-            # sleep(2)
 
-            # self.enemy_attack(enemy, hero)
-            # self.hero_attack(hero, enemy)
-
-            # self.play = False
             self.fight(hero, enemy)
 
 
 
-            # self.fight(hero, enemy)
-
-    # def enemy_attack(self, enemy, hero):
-    #     self.make_move(enemy, 50)
-    #     self.update_map(hero, enemy)
-    #     sleep(2)
-    #     self.make_move(enemy, -50)
-    #     self.update_map(hero, enemy)
-    #     sleep(2)
-    #
-    # def hero_attack(self, hero, enemy):
-    #     self.make_move(hero, -50)
-    #     self.update_map(hero, enemy)
-    #     sleep(2)
-    #     self.make_move(hero, 50)
-    #     self.update_map(hero, enemy)
-    #     sleep(2)
 
     def enemy_attack1(self, enemy, hero):
         self.make_move(enemy, 50)
@@ -194,16 +165,3 @@ class Battle2:
     def make_move(self, enemy, distance):
         enemy.position_y += distance
         # self.update_map()
-
-
-
-
-
-
-
-#hero1 = Worrior('Mime','textures/characters/MIME.png', 120, 250, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
-#monster1 = Worrior('Snorlax','textures/characters/SNORLAX.png', 120, 10, random.randint(100, 300), random.randint(50, 100), random.randint(5, 10))
-
-
-#battle = Battle2()
-#battle.new(hero1, monster1)
