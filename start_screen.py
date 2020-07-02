@@ -223,9 +223,9 @@ def create_champ(nick):
             global hero, done
             if click:
                 if available_points == 0:
-                    action += 5
+                    action += 10
                     print("zmieniam hirka")
-                    hero = Worrior(name=nick, sprite='./BULBA64.png', position_x = 0, position_y = 0, hp = health, ad = strength, arm = armor, pa = action)
+                    hero = Worrior(name=nick, sprite='./BULBA64.png', position_x = 0, position_y = 0, hp = (health * 50), ad = (strength * 25), arm = (armor * 10), pa = action)
                     print(f'moje statystyki {hero.name} \n {hero.sprite}   \n {hero.hp}  \n {hero.arm}')
                     done = True
                     running = False
